@@ -1,0 +1,26 @@
+{
+  "defaultSeverity": "warning",
+  "extends": [
+    "tslint:latest",
+    "tslint-plugin-prettier",
+    "tslint-config-prettier",
+    "tslint-react"
+  ],
+  "jsRules": {},
+  "rules": {
+    "prettier": [
+      true,
+      {
+        "singleQuote": true,
+        "trailingComma": "es5"
+      }
+    ],
+    "object-literal-sort-keys": false,
+    "no-submodule-imports": false,
+    "no-implicit-dependencies": false
+  },
+  "rulesDirectory": [],
+  "linterOptions": {
+    "exclude": ["node_modules"]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "editor.formatOnSave": false,
+  "eslint.enable": true,
+  "eslint.autoFixOnSave": true,
+  "tslint.autoFixOnSave": true,
+  "eslint.packageManager": "yarn",
+  "javascript.validate.enable": false,
+  "javascript.format.enable": false,
+  "editor.tabSize": 2,
+  "typescript.tsdk": "node_modules/typescript/lib"
+}

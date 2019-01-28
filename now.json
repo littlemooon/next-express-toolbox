@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "name": "next-ssr",
+  "builds": [
+    { "src": "server/index.ts", "use": "@now/node-server" }
+  ]
+}
