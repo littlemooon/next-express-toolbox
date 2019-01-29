@@ -1,13 +1,18 @@
-import Link from 'next/link';
-import Header from '../components/header';
+import { NextFC } from 'next'
+import Link from 'next/link'
+import Header from '../components/header'
 
-export default () => (
-  <main>
-    <Header />
-    <section>
-      <Link href="/about">
-        <a>Go to About Me</a>
-      </Link>
-    </section>
-  </main>
-);
+const Index: NextFC = () => {
+  return (
+    <main>
+      <Header />
+      <section>
+        <Link href="/about">
+          <a>Go to About Me</a>
+        </Link>
+      </section>
+    </main>
+  )
+}
+
+export default Index

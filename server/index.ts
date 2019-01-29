@@ -1,34 +1,29 @@
-import * as express from 'express';
-import * as next from 'next';
-import { error, log } from '../common/log';
+import * as express from 'express'
+import * as next from 'next'
+import { DEV, PORT } from '../common/config'
+import { error, log } from '../common/log'
+import renderPdf from './pdf'
 
-const dev = process.env.NODE_ENV !== 'production';
-const app = next({ dev });
-const handle = app.getRequestHandler();
+const app = next({ dev: DEV })
+const handle = app.getRequestHandler()
 
 app
   .prepare()
   .then(() => {
-    const server = express();
+    const server = express()
 
-    server.use('/pdf/*', (req, res) => {
-      // generate pdf
-      log('-------------------- index --> ', { req, res });
-      return res.send(200);
-    });
+    server.get('/pdf/*', async (req, res) => renderPdf(req, res))
 
-    server.get('*', (req, res) => {
-      return handle(req, res);
-    });
+    server.get('*', (req, res) => handle(req, res))
 
-    server.listen(4000, (err: Error) => {
+    server.listen(PORT, (err: Error) => {
       if (err) {
-        throw err;
+        throw err
       }
-      log('> Ready on http://localhost:4000');
-    });
+      log(`> Ready on http://localhost:${PORT}`)
+    })
   })
   .catch(ex => {
-    error(ex.stack);
-    process.exit(1);
-  });
+    error(ex.stack)
+    process.exit(1)
+  })

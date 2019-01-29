@@ -1,0 +1,8 @@
+
+{
+  "verbose": true,
+  "watch": ["common", "components", "pages", "server"],
+  "ext": "ts tsx",
+  "ignore": ["server/**/*.spec.ts"],
+  "exec": "ts-node ./server/index.ts"
+}

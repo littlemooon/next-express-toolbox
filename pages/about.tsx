@@ -1,11 +1,11 @@
-import Link from 'next/link';
-import { Component } from 'react';
-import Header from '../components/header';
+import Link from 'next/link'
+import { Component } from 'react'
+import Header from '../components/header'
 
 class AboutPage extends Component<{ isServer: boolean }> {
   public static getInitialProps() {
-    const isServer = typeof window === 'undefined';
-    return { isServer };
+    const isServer = typeof window === 'undefined'
+    return { isServer }
   }
 
   public render() {
@@ -23,8 +23,8 @@ class AboutPage extends Component<{ isServer: boolean }> {
           </Link>
         </section>
       </main>
-    );
+    )
   }
 }
 
-export default AboutPage;
+export default AboutPage

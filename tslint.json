@@ -12,7 +12,8 @@
       true,
       {
         "singleQuote": true,
-        "trailingComma": "es5"
+        "trailingComma": "es5",
+        "semi": false
       }
     ],
     "object-literal-sort-keys": false,
