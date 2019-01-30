@@ -1,66 +1,67 @@
-import fetch from 'isomorphic-unfetch'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { FetchState, IFetch, IFetchSSR } from '../types/index'
+import Fetch from '../Fetch'
+import { FetchState, IFetch, IState } from '../types/index'
 
 export interface IFetchOpts<R> {
-  readBody: (res: Response) => Promise<R>
-  fetchParams?: RequestInit
-  initialData?: R
+  additionalUrl?: string
+  cachedState?: IState<R>
+  ssrFetcher?: Fetch<R>
 }
 
-const defaultOpts = {
-  readBody: (res: Response) => res.json(),
-}
-let i = 0
-export default function useFetch<R extends object>(
-  url: string,
-  opts: Partial<IFetchOpts<R>>
+export default function useFetch<R>(
+  fetcher: Fetch<R>,
+  opts: IFetchOpts<R> = {}
 ): IFetch<R> {
-  const [state, setState] = useState<FetchState>(FetchState.INITIAL)
-  const [error, setError] = useState<Error | undefined>(undefined)
-  const [data, setData] = useState<Partial<R>>({})
-  const abortController = useRef<AbortController | undefined>(undefined)
-  const { readBody, initialData, fetchParams } = { ...defaultOpts, ...opts }
+  const { additionalUrl, cachedState, ssrFetcher } = opts
+  const ssrData = ssrFetcher ? ssrFetcher.data : undefined
 
-  const fetchData = async () => {
+  const [state, setState] = useState<FetchState>(
+    ssrData ? FetchState.SUCCESS : FetchState.INITIAL
+  )
+  const [error, setError] = useState<Error | undefined>(undefined)
+  const [data, setData] = useState<R | undefined>(ssrData)
+  const abortController = useRef<AbortController | undefined>(undefined)
+
+  const fetchData = async ({ noCache }: { noCache?: boolean } = {}) => {
+    const url = fetcher.getUrl(additionalUrl)
     const controller = new AbortController()
     abortController.current = controller
 
-    if (initialData && state === FetchState.INITIAL) {
-      setState(FetchState.SUCCESS)
-      setData(initialData)
-      return
+    if (!noCache) {
+      const cached = cachedState ? cachedState.get(url) : undefined
+      if (cached) {
+        setState(FetchState.SUCCESS)
+        setData(cached)
+        setError(undefined)
+        abortController.current = undefined
+        return
+      }
     }
-    console.log('-------------------- useFetch --> ', i++, state, initialData)
-    if (i > 5) {
-      return
-    }
-    setError(undefined)
     setState(FetchState.LOADING)
-    setData({})
+    setData(undefined)
+    setError(undefined)
 
     try {
-      const response = await fetch(url, {
-        signal: abortController.current.signal,
-        ...fetchParams,
+      const fetchResponse: IFetch<R> = await fetcher.call(additionalUrl, {
+        fetchOpts: {
+          signal: abortController.current.signal,
+        },
       })
 
-      if (response.ok) {
-        const body = await readBody(response)
-        if (abortController.current === controller) {
-          setData(body)
-          setState(FetchState.SUCCESS)
-          abortController.current = undefined
-        }
-      } else if (abortController.current === controller) {
-        setError(new Error(response.statusText))
-        setState(FetchState.API_ERROR)
-        abortController.current = undefined
+      setState(fetchResponse.state)
+      setData(fetchResponse.data)
+      setError(fetchResponse.error)
+      console.log('-------------------- useFetch --> 1', fetchResponse.state)
+      if (cachedState && fetchResponse.data) {
+        console.log('-------------------- useFetch --> 2', fetchResponse.data)
+        cachedState.set(url, fetchResponse.data)
       }
+
+      abortController.current = undefined
     } catch (e) {
       if (abortController.current === controller) {
-        setError(e)
         setState(FetchState.CATCH_ERROR)
+        setError(e)
         abortController.current = undefined
       }
     }
@@ -80,13 +81,16 @@ export default function useFetch<R extends object>(
   }
 
   useEffect(() => {
-    console.log('-------------------- useFetch --> ', 'useeffect', {
-      url,
-      fetchParams,
-    })
-    fetchData()
+    const ssrUrl = ssrFetcher ? ssrFetcher.lastUrl : ''
+    if (fetcher.getUrl(additionalUrl) !== ssrUrl) {
+      fetchData()
+    } else {
+      if (cachedState && ssrData && !cachedState.get(ssrUrl)) {
+        cachedState.set(ssrUrl, ssrData)
+      }
+    }
     return cleanup
-  }, [url, fetchParams])
+  }, [additionalUrl])
 
   return {
     error,
@@ -94,12 +98,5 @@ export default function useFetch<R extends object>(
     data,
     abort,
     fetch: fetchData,
-  }
-}
-
-export function fetchSsr<R>(data: R): IFetchSSR<R> {
-  return {
-    data,
-    state: FetchState.SUCCESS,
   }
 }

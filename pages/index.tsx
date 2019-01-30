@@ -1,17 +1,11 @@
 import { NextFC } from 'next'
-import Link from 'next/link'
-import Header from '../components/header'
+import Layout from '../layout';
 
 const Index: NextFC = () => {
   return (
-    <main>
-      <Header />
-      <section>
-        <Link href="/about">
-          <a>Go to About Me</a>
-        </Link>
-      </section>
-    </main>
+    <Layout>
+      This is the index page
+    </Layout>
   )
 }
 
