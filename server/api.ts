@@ -7,7 +7,7 @@ const proxy = httpProxy.createProxyServer({
 
 const api = express()
 
-api.use('/api/github', (req, res) =>
+api.use('/github', (req, res) =>
   proxy.web(req, res, { target: 'https://api.github.com' }, (error: Error) => {
     if (error) {
       res.status(500).send({ status: 'unknown_error', message: error.message })

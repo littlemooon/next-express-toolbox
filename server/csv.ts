@@ -35,6 +35,6 @@ async function saveCsv(req: express.Request, res: express.Response) {
 
 const app = express()
 
-app.post('/csv/*', saveCsv)
+app.post('*', saveCsv)
 
 export default app

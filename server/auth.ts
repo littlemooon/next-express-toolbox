@@ -38,14 +38,14 @@ authGoogle(passport)
 app.use(passport.initialize())
 
 app.get(
-  '/auth/google',
+  '/google',
   passport.authenticate('google', {
     scope: ['https://www.googleapis.com/auth/userinfo.profile'],
   })
 )
 
 app.get(
-  '/auth/google/callback',
+  '/google/callback',
   passport.authenticate('google', {
     failureRedirect: '/',
   }),
@@ -56,7 +56,7 @@ app.get(
   }
 )
 
-app.get('/auth/logout', (req, res) => {
+app.get('/logout', (req, res) => {
   req.logout()
   req.session = undefined
   res.redirect('/')

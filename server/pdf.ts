@@ -28,6 +28,6 @@ async function renderPdf(req: express.Request, res: express.Response) {
 
 const app = express()
 
-app.get('/pdf/*', renderPdf)
+app.get('*', renderPdf)
 
 export default app
