@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { SFC, useContext } from 'react'
 import Fetch from '../common/Fetch'
 import { removeStorage, StorageKey } from '../common/storage'
-import { AuthStateContext } from '../state/AuthState'
+import { AuthContext } from '../state/AuthState'
 
 const logoutFetcher = new Fetch('/logout')
 
@@ -12,7 +12,7 @@ const onLogout = () => {
 }
 
 const Nav: SFC = () => {
-  const authState = useContext(AuthStateContext)
+  const authState = useContext(AuthContext)
 
   return (
     <nav>

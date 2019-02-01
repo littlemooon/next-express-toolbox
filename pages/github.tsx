@@ -40,31 +40,33 @@ const githubRepoFetcher = new FetchGithub('https://api.github.com/repos')
 
 const Github: NextFC<IGithubProps> = props => {
   const [repo, setRepo] = useState(props.repo)
-  const debouncedRepo = useDebounce(repo, 1000)
-  const cacheState = useCache<IGithubData>(CacheKey.GITHUB_REPO)
+  const debouncedRepo = useDebounce(repo, 600)
+  const cacheState = useCache<IGithubData>(
+    CacheKey.GITHUB_REPO,
+    props.githubRepoFetcher
+  )
 
-  const github = useFetch<IGithubData>(githubRepoFetcher, {
+  const githubFetch = useFetch<IGithubData>(githubRepoFetcher, {
     additionalUrl: `/${debouncedRepo}`,
     cacheState,
-    ssrFetcher: props.githubRepoFetcher,
   })
 
   const onChange = (e: SyntheticEvent<HTMLInputElement>) => {
     setRepo(e.currentTarget.value)
   }
 
-  const onRefresh = () => github.fetch()
+  const onRefresh = () => githubFetch.call({ noCache: true })
 
   return (
     <Layout>
       <div>
         <input value={repo} onChange={onChange} />
         <button onClick={onRefresh}>Refresh</button>
-        <p>State: {github.state}</p>
-        {github.error && <p>Error: {github.error.message}</p>}
-        {github.data &&
-          Object.keys(github.data).map(k => {
-            const v = d.get(github, `data.${k}`)
+        <p>State: {githubFetch.state}</p>
+        {githubFetch.error && <p>Error: {githubFetch.error.message}</p>}
+        {githubFetch.data &&
+          Object.keys(githubFetch.data).map(k => {
+            const v = d.get(githubFetch, `data.${k}`)
             return <p key={k}>{`${k}: ${v}`}</p>
           })}
       </div>

@@ -1,6 +1,6 @@
 import { ReactNode, SFC } from 'react'
 import theme from '../common/theme'
-import Flex, { IFlexProps } from '../components/_base/Flex'
+import Flex, { IFlexProps } from '../components/base/Flex'
 
 const Container: SFC<IFlexProps & { children: ReactNode; as?: string }> = ({
   children,

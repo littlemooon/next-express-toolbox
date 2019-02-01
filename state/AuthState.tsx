@@ -17,11 +17,11 @@ function isAuthState(authState: any): authState is IAuthState {
   )
 }
 
-export const AuthStateContext = createContext<IAuthState>({
+export const AuthContext = createContext<IAuthState>({
   user: {},
 })
 
-const AuthStateProvider: SFC<{
+const AuthProvider: SFC<{
   children: ReactNode
   value: Partial<IAuthState>
 }> = props => {
@@ -38,10 +38,10 @@ const AuthStateProvider: SFC<{
   }, [])
 
   return (
-    <AuthStateContext.Provider value={authState}>
+    <AuthContext.Provider value={authState}>
       {props.children}
-    </AuthStateContext.Provider>
+    </AuthContext.Provider>
   )
 }
 
-export default AuthStateProvider
+export default AuthProvider

@@ -1,10 +1,9 @@
 import { css, Global } from '@emotion/core'
 import d from 'dot-prop'
+import { ThemeProvider } from 'emotion-theming'
 import App, { Container, DefaultAppIProps, NextAppContext } from 'next/app'
-import AuthStateProvider, {
-  AuthStateContext,
-  IAuthState,
-} from '../state/AuthState'
+import theme from '../common/theme'
+import AuthProvider, { AuthContext, IAuthState } from '../state/AuthState'
 import StateProvider from '../state/index'
 
 interface IAppPageProps {
@@ -12,7 +11,7 @@ interface IAppPageProps {
 }
 
 export default class AppPage extends App<IAppPageProps> {
-  public static contextType = AuthStateContext
+  public static contextType = AuthContext
 
   public static getInitialProps = async ({
     ctx,
@@ -49,11 +48,13 @@ export default class AppPage extends App<IAppPageProps> {
           `}
         />
         <Container>
-          <AuthStateProvider value={authState}>
-            <StateProvider>
-              <Component {...pageProps} />
-            </StateProvider>
-          </AuthStateProvider>
+          <ThemeProvider theme={theme}>
+            <AuthProvider value={authState}>
+              <StateProvider>
+                <Component {...pageProps} />
+              </StateProvider>
+            </AuthProvider>
+          </ThemeProvider>
         </Container>
       </>
     )

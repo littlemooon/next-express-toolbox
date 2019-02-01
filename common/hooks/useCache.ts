@@ -1,16 +1,32 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { CacheKey, ICache } from '../../state/CacheState'
+import Fetch from '../Fetch'
 
-export default function useCache<T>(cacheKey: CacheKey): ICache<T> {
-  const [data, setData] = useState<Map<string, T>>(new Map())
+export interface ICached<T> {
+  data: T
+  lastUpdated?: Date
+}
+
+export default function useCache<T>(
+  id: CacheKey,
+  ssrFetch?: Fetch<T>
+): ICache<T> {
+  const [cached, setCached] = useState<Map<string, ICached<T>>>(new Map())
 
   const set = (key: string, value: T) => {
-    setData(data.set(key, value))
+    setCached(cached.set(key, { data: value, lastUpdated: new Date() }))
   }
 
   const get = (key: string): T | undefined => {
-    return data.get(key)
+    const item = cached.get(key)
+    return item ? item.data : undefined
   }
 
-  return { key: cacheKey, set, get, data }
+  useEffect(() => {
+    if (ssrFetch && ssrFetch.data) {
+      set(ssrFetch.lastUrl, ssrFetch.data)
+    }
+  }, [])
+
+  return { id, set, get }
 }

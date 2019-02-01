@@ -1,12 +1,12 @@
 import { SFC } from 'react'
 import theme from '../common/theme'
-import Shadow from '../components/_base/Shadow'
+import Shadow from '../components/base/Shadow'
 import Container from './Container'
 import Nav from './Nav'
 
 const Header: SFC = () => {
   return (
-    <Shadow as="header" width={1} bg="grey" height={theme.h.header}>
+    <Shadow as="header" width={1} bg="blue" height={theme.h.header}>
       <Container
         color="white"
         flexDirection="row"

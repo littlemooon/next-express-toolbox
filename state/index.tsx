@@ -1,18 +1,13 @@
 import { ReactNode } from 'react'
 import { IGithubData } from '../common/types/github'
-import CacheStateProvider, {
-  CacheKey,
-  createCacheStateContext,
-} from './CacheState'
+import CacheProvider, { CacheKey, createCacheContext } from './CacheState'
 
-export const GithubRepoContext = createCacheStateContext<IGithubData>(
+export const GithubRepoContext = createCacheContext<IGithubData>(
   CacheKey.GITHUB_REPO
 )
 
 export default function StateProvider(props: { children: ReactNode }) {
   return (
-    <CacheStateProvider key={CacheKey.GITHUB_REPO} context={GithubRepoContext}>
-      {props.children}
-    </CacheStateProvider>
+    <CacheProvider context={GithubRepoContext}>{props.children}</CacheProvider>
   )
 }

@@ -1,19 +1,19 @@
 interface Colors {
-  black: string;
-  blue: string;
-  blueDark: string;
-  blueLight: string;
-  green: string;
-  grey: string;
-  greyBlue: string;
-  greyBorder: string;
-  greyDark: string;
-  greyLight: string;
-  greyLighter: string;
-  redDark: string;
-  redLight: string;
-  redLighter: string;
-  white: string;
+  black: string
+  blue: string
+  blueDark: string
+  blueLight: string
+  green: string
+  grey: string
+  greyBlue: string
+  greyBorder: string
+  greyDark: string
+  greyLight: string
+  greyLighter: string
+  redDark: string
+  redLight: string
+  redLighter: string
+  white: string
 }
 
 const colors: Colors = {
@@ -32,81 +32,81 @@ const colors: Colors = {
   redLight: '#ff4759',
   redLighter: '#ffdfdf',
   white: '#ffffff',
-};
+}
 
-export type Pixels = string;
+export type Pixels = string
 
-export interface Theme {
-  colors: Colors;
-  brand: string;
-  cta: string;
-  white: string;
-  black: string;
+export interface ITheme {
+  colors: Colors
+  brand: string
+  cta: string
+  white: string
+  black: string
   bg: {
-    blue: string;
-    light: string;
-    dark: string;
-    lightBlue: string;
-    darkBlue: string;
-    secondary: string;
-    primary: string;
-    disabled: string;
-    disabledLight: string;
-    red: string;
-    warning: string;
-  };
+    blue: string
+    light: string
+    dark: string
+    lightBlue: string
+    darkBlue: string
+    secondary: string
+    primary: string
+    disabled: string
+    disabledLight: string
+    red: string
+    warning: string
+  }
   tx: {
-    primary: string;
-    secondary: string;
-    accent: string;
-    accentRed: string;
-    link: string;
-    error: string;
-    success: string;
-  };
+    primary: string
+    secondary: string
+    accent: string
+    accentRed: string
+    link: string
+    error: string
+    success: string
+  }
   bd: {
-    primary: string;
-    secondary: string;
-    dotted: string;
-    input: string;
-    inputActive: string;
-    inputReadonly: string;
-    step: string;
-    tab: string;
-    tabActive: string;
-    divider: string;
-    box: string;
-    boxActive: string;
-    card: string;
-  };
+    primary: string
+    secondary: string
+    dotted: string
+    input: string
+    inputActive: string
+    inputReadonly: string
+    step: string
+    tab: string
+    tabActive: string
+    divider: string
+    box: string
+    boxActive: string
+    card: string
+  }
   bp: {
-    mobile: Pixels;
-    tablet: Pixels;
-    desktop: Pixels;
-  };
+    mobile: Pixels
+    tablet: Pixels
+    desktop: Pixels
+  }
 
   h: {
-    header: Pixels;
-  };
+    header: Pixels
+  }
 
   mw: {
-    form: Pixels;
-    small: Pixels;
-    main: Pixels;
-    wide: Pixels;
-  };
-  space: number[];
-  fontSizes: number[];
-  breakpoints: string[];
+    form: Pixels
+    small: Pixels
+    main: Pixels
+    wide: Pixels
+  }
+  space: number[]
+  fontSizes: number[]
+  breakpoints: string[]
 }
 
 const breakpoints = {
   mobile: '479px',
   tablet: '959px',
   desktop: '1170px',
-};
+}
 
-const theme: Theme = {
+const theme: ITheme = {
   colors,
   brand: colors.blue,
   cta: colors.green,
@@ -179,6 +179,6 @@ const theme: Theme = {
   //          0   1   2   3   4   5   6   7   8
   fontSizes: [12, 14, 16, 20, 24, 32, 48, 64, 72],
   breakpoints: Object.values(breakpoints),
-};
+}
 
-export default theme;
+export default theme

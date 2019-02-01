@@ -12,12 +12,10 @@ export enum FetchState {
   UNUSED_CALL = 'UNUSED_CALL',
 }
 
-export interface IFetch<R> {
-  data?: R
+export interface IFetchResponse<T> {
+  data?: T
   state: FetchState
   error?: Error
-  abort: () => void
-  fetch: () => void
 }
 
 export interface IFetchOpts<Q> {
@@ -25,26 +23,11 @@ export interface IFetchOpts<Q> {
   fetchOpts: RequestInit
 }
 
-const noop = () => undefined
-
-export function createDefaultFetchResponse(
-  fetchReponse: Partial<IFetch<any>> = {}
-): IFetch<any> {
-  return {
-    state: FetchState.INITIAL,
-    abort: noop,
-    fetch: noop,
-    data: {},
-    error: undefined,
-    ...fetchReponse,
-  }
-}
-
-export default class Fetch<R, Q extends object = {}> {
+export default class Fetch<T, Q extends object = {}> {
   public baseUrl: string
   public lastUrl: string = ''
   public opts: IFetchOpts<Q>
-  public data?: R
+  public data?: T
 
   constructor(
     baseUrl: string,
@@ -54,8 +37,8 @@ export default class Fetch<R, Q extends object = {}> {
     this.opts = opts
   }
 
-  public transformBody = async (res: Response): Promise<R> => {
-    const json = (await res.json()) as R
+  public transformBody = async (res: Response): Promise<T> => {
+    const json = (await res.json()) as T
     return json
   }
 
@@ -67,7 +50,7 @@ export default class Fetch<R, Q extends object = {}> {
   public async call(
     additionalUrl?: string,
     opts?: Partial<IFetchOpts<Q>>
-  ): Promise<IFetch<R>> {
+  ): Promise<IFetchResponse<T>> {
     const { query, fetchOpts } = { ...this.opts, ...opts }
     const url = this.getUrl(additionalUrl, query)
     this.lastUrl = url
@@ -78,23 +61,23 @@ export default class Fetch<R, Q extends object = {}> {
       if (res.ok) {
         const data = await this.transformBody(res)
         this.data = data
-        return createDefaultFetchResponse({
+        return {
           state: FetchState.SUCCESS,
           data,
-        })
+        }
       } else {
         this.data = undefined
-        return createDefaultFetchResponse({
+        return {
           state: FetchState.API_ERROR,
           error: new Error(res.statusText),
-        })
+        }
       }
     } catch (e) {
       this.data = undefined
-      return createDefaultFetchResponse({
+      return {
         state: FetchState.CATCH_ERROR,
         error: e,
-      })
+      }
     }
   }
 }
