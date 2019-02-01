@@ -63,7 +63,6 @@ export default class Fetch<T, Q extends object = {}> {
     this.lastUrl = url
 
     try {
-      console.log('-------------------- Fetch --> ', url, fetchOpts)
       const res = await fetch(url, fetchOpts)
 
       if (res.ok) {

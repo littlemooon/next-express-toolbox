@@ -26,8 +26,10 @@ async function renderPdf(req: express.Request, res: express.Response) {
   }
 }
 
-const app = express()
+export default function() {
+  const app = express()
 
-app.get('*', renderPdf)
+  app.get('*', renderPdf)
 
-export default app
+  return app
+}

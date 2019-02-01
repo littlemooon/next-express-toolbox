@@ -8,16 +8,8 @@ async function saveCsv(req: express.Request, res: express.Response) {
   try {
     const busboy = new Busboy({ headers: req.headers })
 
-    busboy.on('file', (fieldname, file, filename, encoding, mimetype) => {
+    busboy.on('file', (fieldname, file) => {
       const saveTo = path.join(process.cwd(), '/tmp/', path.basename(fieldname))
-      console.log('-------------------- csv --> ', {
-        fieldname,
-        file,
-        filename,
-        encoding,
-        mimetype,
-        saveTo,
-      })
       file.pipe(fs.createWriteStream(saveTo))
     })
 
@@ -33,8 +25,10 @@ async function saveCsv(req: express.Request, res: express.Response) {
   }
 }
 
-const app = express()
+export default function() {
+  const app = express()
 
-app.post('*', saveCsv)
+  app.post('*', saveCsv)
 
-export default app
+  return app
+}

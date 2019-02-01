@@ -31,13 +31,13 @@ app
     server.use(cookieParser())
     // server.use(morgan('combined'))
 
-    server.use('/auth', auth)
+    server.use('/auth', auth())
 
-    server.use('/pdf', pdf)
+    server.use('/pdf', pdf())
 
-    server.use('/csv', csv)
+    server.use('/csv', csv())
 
-    server.use('/api', api)
+    server.use('/api', api())
 
     server.get('*', (req, res) => handle(req, res))
 
