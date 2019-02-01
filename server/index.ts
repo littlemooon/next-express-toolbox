@@ -1,9 +1,10 @@
 import * as cookieParser from 'cookie-parser'
 import * as express from 'express'
-// import * as morgan from 'morgan'
+import * as morgan from 'morgan'
 import * as next from 'next'
 import { DEV, PORT } from '../common/config'
 import { error, log } from '../common/log'
+import { startsWith } from '../common/string'
 import api from './api'
 import auth from './auth'
 import csv from './csv'
@@ -29,7 +30,12 @@ app
       })
     )
     server.use(cookieParser())
-    // server.use(morgan('combined'))
+
+    server.use(
+      morgan('dev', {
+        skip: req => startsWith(req.path, '/_next'),
+      })
+    )
 
     server.use('/auth', auth())
 
