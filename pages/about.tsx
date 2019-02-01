@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Component } from 'react'
-import Header from '../components/header'
+import Layout from '../layout'
 
 class AboutPage extends Component<{ isServer: boolean }> {
   public static getInitialProps() {
@@ -10,8 +10,7 @@ class AboutPage extends Component<{ isServer: boolean }> {
 
   public render() {
     return (
-      <main>
-        <Header />
+      <Layout>
         <section>
           <p>
             This is another page of the SSR example, you accessed it{' '}
@@ -22,7 +21,7 @@ class AboutPage extends Component<{ isServer: boolean }> {
             <a>Go to Home</a>
           </Link>
         </section>
-      </main>
+      </Layout>
     )
   }
 }

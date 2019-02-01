@@ -1,25 +1,25 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import Fetch from '../Fetch'
-import { FetchState, IFetch, IState } from '../types/index'
+import { ICache } from '../../state/CacheState'
+import Fetch, { FetchState, IFetch } from '../Fetch'
 
-export interface IFetchOpts<R> {
+export interface IFetchOpts<T> {
   additionalUrl?: string
-  cachedState?: IState<R>
-  ssrFetcher?: Fetch<R>
+  cacheState?: ICache<T>
+  ssrFetcher?: Fetch<T>
 }
 
-export default function useFetch<R>(
-  fetcher: Fetch<R>,
-  opts: IFetchOpts<R> = {}
-): IFetch<R> {
-  const { additionalUrl, cachedState, ssrFetcher } = opts
+export default function useFetch<T>(
+  fetcher: Fetch<T>,
+  opts: IFetchOpts<T> = {}
+): IFetch<T> {
+  const { additionalUrl, cacheState, ssrFetcher } = opts
   const ssrData = ssrFetcher ? ssrFetcher.data : undefined
 
   const [state, setState] = useState<FetchState>(
     ssrData ? FetchState.SUCCESS : FetchState.INITIAL
   )
   const [error, setError] = useState<Error | undefined>(undefined)
-  const [data, setData] = useState<R | undefined>(ssrData)
+  const [data, setData] = useState<T | undefined>(ssrData)
   const abortController = useRef<AbortController | undefined>(undefined)
 
   const fetchData = async ({ noCache }: { noCache?: boolean } = {}) => {
@@ -27,8 +27,8 @@ export default function useFetch<R>(
     const controller = new AbortController()
     abortController.current = controller
 
-    if (!noCache) {
-      const cached = cachedState ? cachedState.get(url) : undefined
+    if (!noCache && cacheState) {
+      const cached = cacheState.get(url)
       if (cached) {
         setState(FetchState.SUCCESS)
         setData(cached)
@@ -42,7 +42,7 @@ export default function useFetch<R>(
     setError(undefined)
 
     try {
-      const fetchResponse: IFetch<R> = await fetcher.call(additionalUrl, {
+      const fetchResponse: IFetch<T> = await fetcher.call(additionalUrl, {
         fetchOpts: {
           signal: abortController.current.signal,
         },
@@ -51,13 +51,15 @@ export default function useFetch<R>(
       setState(fetchResponse.state)
       setData(fetchResponse.data)
       setError(fetchResponse.error)
-      console.log('-------------------- useFetch --> 1', fetchResponse.state)
-      if (cachedState && fetchResponse.data) {
-        console.log('-------------------- useFetch --> 2', fetchResponse.data)
-        cachedState.set(url, fetchResponse.data)
-      }
-
       abortController.current = undefined
+
+      if (
+        cacheState &&
+        fetchResponse.state === FetchState.SUCCESS &&
+        fetchResponse.data
+      ) {
+        cacheState.set(url, fetchResponse.data)
+      }
     } catch (e) {
       if (abortController.current === controller) {
         setState(FetchState.CATCH_ERROR)
@@ -85,8 +87,8 @@ export default function useFetch<R>(
     if (fetcher.getUrl(additionalUrl) !== ssrUrl) {
       fetchData()
     } else {
-      if (cachedState && ssrData && !cachedState.get(ssrUrl)) {
-        cachedState.set(ssrUrl, ssrData)
+      if (cacheState && ssrData && !cacheState.get(ssrUrl)) {
+        cacheState.set(ssrUrl, ssrData)
       }
     }
     return cleanup

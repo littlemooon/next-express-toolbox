@@ -3,6 +3,7 @@ import { DeviceType } from './types'
 export enum WindowKey {
   X = 'X',
   NAVIGATOR = 'navigator',
+  LOCAL_STORAGE = 'localStorage',
   DEVICE_TYPE = 'DEVICE_TYPE',
 }
 

@@ -8,7 +8,9 @@
     "build": "next build",
     "tsc": "tsc",
     "lint:js": "npx eslint ./ --max-warnings 0 --fix",
-    "lint:ts": "npx tslint --fix -p ."
+    "lint:ts": "npx tslint --fix -p .",
+    "test:watch": "npm test -- --watch",
+    "test": "npx jest"
   },
   "dependencies": {
     "@emotion/core": "^10.0.6",
@@ -43,6 +45,7 @@
   },
   "devDependencies": {
     "@types/express": "^4.16.1",
+    "@types/jest": "^23.3.13",
     "@types/next": "^7.0.6",
     "@types/node": "^10.12.18",
     "@types/puppeteer": "^1.11.2",
@@ -50,14 +53,30 @@
     "@types/react": "^16.7.21",
     "@types/react-dom": "^16.0.11",
     "babel-plugin-emotion": "^10.0.6",
+    "jest": "^24.0.0",
     "lerna": "^3.10.7",
     "nodemon": "^1.18.9",
     "prettier": "^1.16.1",
+    "ts-jest": "^23.10.5",
     "ts-node": "^8.0.2",
     "tslint": "^5.12.1",
     "tslint-config-prettier": "^1.17.0",
     "tslint-plugin-prettier": "^2.0.1",
     "tslint-react": "^3.6.0",
     "typescript": "^3.2.4"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
   }
 }

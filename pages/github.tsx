@@ -1,17 +1,33 @@
+import d from 'dot-prop'
 import { NextFC } from 'next'
-import { SyntheticEvent, useContext, useState } from 'react'
+import { SyntheticEvent, useState } from 'react'
 import Fetch from '../common/Fetch'
+import useCache from '../common/hooks/useCache'
 import useDebounce from '../common/hooks/useDebounce'
 import useFetch from '../common/hooks/useFetch'
-import { IGithubData } from '../common/types/github'
+import { IGithubData, IGithubDataRaw } from '../common/types/github'
 import Layout from '../layout'
-import { GithubRepoContext } from '../state/GithubRepoState'
+import { CacheKey } from '../state/CacheState'
 
 class FetchGithub extends Fetch<IGithubData> {
   public transformBody = async (res: Response): Promise<IGithubData> => {
-    const json = await res.json()
-    console.log('-------------------- github --> transfdorm', json)
-    return json
+    const json = (await res.json()) as IGithubDataRaw
+    return {
+      id: json.id,
+      name: json.name,
+      fullName: json.full_name,
+      username: json.owner.login,
+      userId: json.owner.id,
+      userAvatarUrl: json.owner.avatar_url,
+      description: json.description,
+      url: json.url,
+      createdAt: json.created_at,
+      updatedAt: json.updated_at,
+      pushedAt: json.pushed_at,
+      size: json.size,
+      stargazers: json.stargazers_count,
+      openIssues: json.open_issues_count,
+    }
   }
 }
 
@@ -25,11 +41,11 @@ const githubRepoFetcher = new FetchGithub('https://api.github.com/repos')
 const Github: NextFC<IGithubProps> = props => {
   const [repo, setRepo] = useState(props.repo)
   const debouncedRepo = useDebounce(repo, 1000)
-  const cachedState = useContext(GithubRepoContext)
+  const cacheState = useCache<IGithubData>(CacheKey.GITHUB_REPO)
 
   const github = useFetch<IGithubData>(githubRepoFetcher, {
     additionalUrl: `/${debouncedRepo}`,
-    cachedState,
+    cacheState,
     ssrFetcher: props.githubRepoFetcher,
   })
 
@@ -45,14 +61,12 @@ const Github: NextFC<IGithubProps> = props => {
         <input value={repo} onChange={onChange} />
         <button onClick={onRefresh}>Refresh</button>
         <p>State: {github.state}</p>
-        {github.data && (
-          <>
-            <p>Name: {github.data.name}</p>
-            <p>Next stars: {github.data.stargazers_count}</p>
-          </>
-        )}
-        <p>Error: {github.error && github.error.message}</p>
-        <p>String: {JSON.stringify(github.data)}</p>
+        {github.error && <p>Error: {github.error.message}</p>}
+        {github.data &&
+          Object.keys(github.data).map(k => {
+            const v = d.get(github, `data.${k}`)
+            return <p key={k}>{`${k}: ${v}`}</p>
+          })}
       </div>
     </Layout>
   )

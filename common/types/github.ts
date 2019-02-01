@@ -1,5 +1,22 @@
 export interface IGithubData {
   id: number
+  name: string
+  fullName: string
+  username: string
+  userId: string
+  userAvatarUrl: string
+  description: string
+  url: string
+  createdAt: string
+  updatedAt: string
+  pushedAt: string
+  size: number
+  stargazers: number
+  openIssues: number
+}
+
+export interface IGithubDataRaw {
+  id: number
   node_id: string
   name: string
   full_name: string

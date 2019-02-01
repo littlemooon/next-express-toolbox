@@ -1,12 +1,17 @@
 import Link from 'next/link'
 import { SFC, useContext } from 'react'
 import Fetch from '../common/Fetch'
+import { removeStorage, StorageKey } from '../common/storage'
 import { AuthStateContext } from '../state/AuthState'
 
 const logoutFetcher = new Fetch('/logout')
 
+const onLogout = () => {
+  removeStorage(StorageKey.AUTH_STATE)
+  logoutFetcher.call()
+}
+
 const Nav: SFC = () => {
-  const onClick = () => logoutFetcher.call()
   const authState = useContext(AuthStateContext)
 
   return (
@@ -22,9 +27,12 @@ const Nav: SFC = () => {
       </Link>
 
       {authState.token ? (
-        <Link href="/">
-          <button onClick={onClick}>Logout</button>
-        </Link>
+        <>
+          Hello <strong>{authState.user.displayName}</strong>
+          <Link href="/">
+            <button onClick={onLogout}>Logout</button>
+          </Link>
+        </>
       ) : (
         <Link href="/auth/google">
           <button>Login</button>

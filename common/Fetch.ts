@@ -2,7 +2,23 @@ import fetch from 'isomorphic-unfetch'
 import qs from 'query-string'
 import { BASE_URL } from './config'
 import { startsWith } from './string'
-import { FetchState, IFetch } from './types/index'
+
+export enum FetchState {
+  LOADING = 'LOADING',
+  INITIAL = 'INITIAL',
+  SUCCESS = 'SUCCESS',
+  API_ERROR = 'API_ERROR',
+  CATCH_ERROR = 'CATCH_ERROR',
+  UNUSED_CALL = 'UNUSED_CALL',
+}
+
+export interface IFetch<R> {
+  data?: R
+  state: FetchState
+  error?: Error
+  abort: () => void
+  fetch: () => void
+}
 
 export interface IFetchOpts<Q> {
   query: Partial<Q>

@@ -1,18 +1,23 @@
 import { css, Global } from '@emotion/core'
 import d from 'dot-prop'
 import App, { Container, DefaultAppIProps, NextAppContext } from 'next/app'
-import { AuthStateContext, IAuthState } from '../state/AuthState'
-import GithubRepoStateProvider from '../state/GithubRepoState'
+import AuthStateProvider, {
+  AuthStateContext,
+  IAuthState,
+} from '../state/AuthState'
+import StateProvider from '../state/index'
 
-interface IAppInitialProps {
-  authState: IAuthState
+interface IAppPageProps {
+  authState: Partial<IAuthState>
 }
 
-export default class AppPage extends App<IAppInitialProps> {
+export default class AppPage extends App<IAppPageProps> {
+  public static contextType = AuthStateContext
+
   public static getInitialProps = async ({
     ctx,
     Component,
-  }: NextAppContext): Promise<IAppInitialProps & DefaultAppIProps> => {
+  }: NextAppContext): Promise<DefaultAppIProps & IAppPageProps> => {
     let pageProps = {}
 
     if (Component.getInitialProps) {
@@ -21,8 +26,8 @@ export default class AppPage extends App<IAppInitialProps> {
 
     return {
       authState: {
-        user: d.get(ctx, 'req.session.passport.user.profile') || {},
-        token: d.get(ctx, 'req.session.token') || '',
+        user: d.get(ctx, 'req.session.passport.user.profile'),
+        token: d.get(ctx, 'req.session.token'),
       },
       pageProps,
     }
@@ -44,11 +49,11 @@ export default class AppPage extends App<IAppInitialProps> {
           `}
         />
         <Container>
-          <AuthStateContext.Provider value={authState}>
-            <GithubRepoStateProvider>
+          <AuthStateProvider value={authState}>
+            <StateProvider>
               <Component {...pageProps} />
-            </GithubRepoStateProvider>
-          </AuthStateContext.Provider>
+            </StateProvider>
+          </AuthStateProvider>
         </Container>
       </>
     )

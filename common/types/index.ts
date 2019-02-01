@@ -1,32 +1,8 @@
-export enum FetchState {
-  LOADING = 'LOADING',
-  INITIAL = 'INITIAL',
-  SUCCESS = 'SUCCESS',
-  API_ERROR = 'API_ERROR',
-  CATCH_ERROR = 'CATCH_ERROR',
-  UNUSED_CALL = 'UNUSED_CALL',
-}
-
 export enum DeviceType {
   web = 'web',
   ios = 'ios',
   android = 'android',
 }
-
-export interface IFetch<R> {
-  data?: R
-  state: FetchState
-  error?: Error
-  abort: () => void
-  fetch: () => void
-}
-
-export interface IState<R> {
-  data: Map<string, R>
-  set: (key: string, value: R) => void
-  get: (key: string) => R | undefined
-}
-
 export interface IAuthUser {
   id: string
   displayName: string
