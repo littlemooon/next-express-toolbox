@@ -36,7 +36,7 @@ interface IGithubProps {
   githubRepoFetcher: FetchGithub
 }
 
-const githubRepoFetcher = new FetchGithub('https://api.github.com/repos')
+const githubRepoFetcher = new FetchGithub('/api/github/repos')
 
 const Github: NextFC<IGithubProps> = props => {
   const [repo, setRepo] = useState(props.repo)

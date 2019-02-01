@@ -4,7 +4,7 @@ import Fetch from '../common/Fetch'
 import { removeStorage, StorageKey } from '../common/storage'
 import { AuthContext } from '../state/AuthState'
 
-const logoutFetcher = new Fetch('/logout')
+const logoutFetcher = new Fetch('/auth/logout')
 
 const onLogout = () => {
   removeStorage(StorageKey.AUTH_STATE)
