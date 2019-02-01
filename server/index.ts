@@ -6,6 +6,7 @@ import { DEV, PORT } from '../common/config'
 import { error, log } from '../common/log'
 import api from './api'
 import auth from './auth'
+import csv from './csv'
 import env from './env'
 import pdf from './pdf'
 
@@ -33,6 +34,8 @@ app
     server.use(auth)
 
     server.use(pdf)
+
+    server.use(csv)
 
     server.use(api)
 

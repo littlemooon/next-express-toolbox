@@ -22,11 +22,12 @@ async function renderPdf(req: express.Request, res: express.Response) {
     browser.close()
   } catch (e) {
     error(e)
+    res.status(500).send({ status: 'unknown_error', message: e.message })
   }
 }
 
 const app = express()
 
-app.get('/pdf/*', (req, res) => renderPdf(req, res))
+app.get('/pdf/*', renderPdf)
 
 export default app

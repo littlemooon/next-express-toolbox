@@ -19,8 +19,8 @@ export interface IFetchResponse<T> {
 }
 
 export interface IFetchOpts<Q> {
-  query: Partial<Q>
-  fetchOpts: RequestInit
+  query?: Partial<Q>
+  fetchOpts?: RequestInit
 }
 
 export default class Fetch<T, Q extends object = {}> {
@@ -43,7 +43,7 @@ export default class Fetch<T, Q extends object = {}> {
   }
 
   public getUrl = (url: string = '', query: Partial<Q> = {}): string => {
-    const queryString = qs.stringify({ ...query, ...this.opts.query })
+    const queryString = qs.stringify({ ...query, ...(this.opts.query || {}) })
     return [`${this.baseUrl}${url}`, queryString].join('?')
   }
 
@@ -51,11 +51,19 @@ export default class Fetch<T, Q extends object = {}> {
     additionalUrl?: string,
     opts?: Partial<IFetchOpts<Q>>
   ): Promise<IFetchResponse<T>> {
-    const { query, fetchOpts } = { ...this.opts, ...opts }
+    const query = {
+      ...(this.opts.query || {}),
+      ...((opts && opts.query) || {}),
+    }
+    const fetchOpts = {
+      ...(this.opts.fetchOpts || {}),
+      ...((opts && opts.fetchOpts) || {}),
+    }
     const url = this.getUrl(additionalUrl, query)
     this.lastUrl = url
 
     try {
+      console.log('-------------------- Fetch --> ', url, fetchOpts)
       const res = await fetch(url, fetchOpts)
 
       if (res.ok) {
