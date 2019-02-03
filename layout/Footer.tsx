@@ -1,12 +1,12 @@
 import { SFC } from 'react'
-import Shadow from '../components/base/Shadow'
+import Box from '../components/base/Box'
 import Container from './Container'
 
 const Footer: SFC = () => {
   return (
-    <Shadow as="footer" width={1} bg="greyLight">
+    <Box as="footer" width={1} bg="greyLight">
       <Container>{'Littlemooon Ltd'}</Container>
-    </Shadow>
+    </Box>
   )
 }
 

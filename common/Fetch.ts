@@ -1,3 +1,4 @@
+import to from 'await-to-js'
 import fetch from 'isomorphic-unfetch'
 import qs from 'query-string'
 import { BASE_URL } from './config'
@@ -7,9 +8,7 @@ export enum FetchState {
   LOADING = 'LOADING',
   INITIAL = 'INITIAL',
   SUCCESS = 'SUCCESS',
-  API_ERROR = 'API_ERROR',
-  CATCH_ERROR = 'CATCH_ERROR',
-  UNUSED_CALL = 'UNUSED_CALL',
+  ERROR = 'ERROR',
 }
 
 export interface IFetchResponse<T> {
@@ -33,7 +32,9 @@ export default class Fetch<T, Q extends object = {}> {
     baseUrl: string,
     opts: IFetchOpts<Q> = { query: {}, fetchOpts: {} }
   ) {
-    this.baseUrl = startsWith(baseUrl, '/') ? `${BASE_URL}${baseUrl}` : baseUrl
+    this.baseUrl = startsWith(baseUrl, '/')
+      ? `${BASE_URL}/api${baseUrl}`
+      : baseUrl
     this.opts = opts
   }
 
@@ -75,16 +76,41 @@ export default class Fetch<T, Q extends object = {}> {
       } else {
         this.data = undefined
         return {
-          state: FetchState.API_ERROR,
+          state: FetchState.ERROR,
           error: new Error(res.statusText),
         }
       }
     } catch (e) {
       this.data = undefined
       return {
-        state: FetchState.CATCH_ERROR,
+        state: FetchState.ERROR,
         error: e,
       }
     }
+  }
+
+  public async get(
+    additionalUrl: string = '',
+    opts: Partial<IFetchOpts<Q>> = {}
+  ) {
+    return to(
+      this.call(additionalUrl, {
+        ...opts,
+        fetchOpts: { method: 'GET', ...(opts.fetchOpts || {}) },
+      })
+    )
+  }
+
+  public async post(
+    additionalUrl: string = '',
+    body: BodyInit,
+    opts: Partial<IFetchOpts<Q>> = {}
+  ) {
+    return to(
+      this.call(additionalUrl, {
+        ...opts,
+        fetchOpts: { method: 'POST', body, ...(opts.fetchOpts || {}) },
+      })
+    )
   }
 }

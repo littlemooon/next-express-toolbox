@@ -89,6 +89,8 @@ export interface ITheme {
     header: Pixels
   }
 
+  bs: string[]
+
   mw: {
     form: Pixels
     small: Pixels
@@ -172,6 +174,13 @@ const theme: ITheme = {
     wide: '1170px',
   },
 
+  // box-shadow
+  bs: [
+    '0',
+    '0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12)',
+    '0px 4px 20px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12)',
+  ],
+
   // styled-system
 
   //      0  1  2  3   4   5   6   7    8    9
@@ -182,3 +191,7 @@ const theme: ITheme = {
 }
 
 export default theme
+
+export const themed = (key: keyof ITheme) => (props: { theme: ITheme }) => {
+  return props.theme[key]
+}

@@ -4,6 +4,7 @@ import { noop } from '../common/utils'
 
 export enum CacheKey {
   GITHUB_REPO = 'GITHUB_REPO',
+  CSV_LIST = 'CSV_LIST',
 }
 
 export interface ICache<T> {

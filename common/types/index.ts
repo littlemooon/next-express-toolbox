@@ -3,6 +3,9 @@ export enum DeviceType {
   ios = 'ios',
   android = 'android',
 }
+
+export type IFileList = string[]
+
 export interface IAuthUser {
   id: string
   displayName: string

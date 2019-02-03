@@ -37,11 +37,11 @@ app
       })
     )
 
-    server.use('/auth', auth())
+    server.use('/api/auth', auth())
 
-    server.use('/pdf', pdf())
+    server.use('/api/pdf', pdf())
 
-    server.use('/csv', csv())
+    server.use('/api/csv', csv())
 
     server.use('/api', api())
 

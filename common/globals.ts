@@ -9,23 +9,17 @@ export enum WindowKey {
 
 declare const window: any
 
+export const isServer = typeof window === 'undefined'
+
 export function fromWindow(key: WindowKey) {
-  try {
-    return window && window[key]
-  } catch (e) {
-    // console.warn('Trying to fromWindow:', e);
-  }
-  return null
+  return isServer ? undefined : window[key]
 }
 
 export function setWindow(key: WindowKey, value: any) {
-  try {
-    if (window) {
-      window[key] = value
-    }
-  } catch (e) {
-    // console.warn('Trying to setWindow:', e);
+  if (!isServer) {
+    window[key] = value
   }
+  return isServer ? undefined : value
 }
 
 export function getDeviceType(initialUserAgent?: string): DeviceType {

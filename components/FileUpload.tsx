@@ -1,5 +1,6 @@
 import { ChangeEvent, SFC, useCallback, useEffect, useState } from 'react'
 import Fetch from '../common/Fetch'
+import { fileListFetcher } from '../common/fetchers'
 import Input from './base/Input'
 
 export interface IFileUploadProps {
@@ -11,9 +12,7 @@ export interface IFileData {
   files?: FileList
 }
 
-const csvFetcher = new Fetch<void>('/csv/example')
-
-function uploadFiles(fetcher: Fetch<void>, files: FileList) {
+function uploadFiles(fetcher: Fetch<any>, files: FileList) {
   const formData = new FormData()
 
   Array.from(new Array(files.length)).map((_, i) => {
@@ -23,7 +22,7 @@ function uploadFiles(fetcher: Fetch<void>, files: FileList) {
     }
   })
 
-  return fetcher.call('', { fetchOpts: { method: 'POST', body: formData } })
+  return fetcher.post('', formData)
 }
 
 const FileUpload: SFC<IFileUploadProps> = props => {
@@ -37,7 +36,7 @@ const FileUpload: SFC<IFileUploadProps> = props => {
 
   useEffect(() => {
     if (data.files) {
-      uploadFiles(csvFetcher, data.files)
+      uploadFiles(fileListFetcher, data.files)
       setData({})
     }
   }, [data])

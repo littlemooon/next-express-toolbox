@@ -17,13 +17,13 @@ const Layout: NextFC<ILayoutProps> = ({
   title = 'This is the default title',
 }) => {
   return (
-    <Flex minHeight="100vh" justifyContent="space-between">
+    <Flex minHeight="100vh" justifyContent="space-between" width={1}>
       <Head>
         <title>{title}</title>
         <meta charSet="utf-8" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      <Box>
+      <Box width={1}>
         <Header />
         <Container as="main" pt={[3, 4, 5]}>
           {children}

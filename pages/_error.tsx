@@ -1,25 +1,34 @@
 import { NextContext, NextFC } from 'next'
+import ErrorBox from '../components/base/ErrorBox'
+import Text from '../components/base/Text'
 
 export interface IErrorProps {
   statusCode?: number
-  err?: Error
+  error?: any
 }
 
-const Error: NextFC<IErrorProps> = props => {
-  const text = props.statusCode
-    ? `An error ${props.statusCode} occurred on server`
+const Error: NextFC<IErrorProps> = ({ error, statusCode }) => {
+  const header = statusCode
+    ? `An error ${statusCode} occurred on server`
     : 'An error occurred on client'
+
   return (
-    <>
-      <p>{text}</p>
-      {props.err && <p style={{ color: 'red' }}>{props.err}</p>}
-    </>
+    <ErrorBox header={header}>
+      {error ? (
+        <>
+          {error.message && <Text>{error.message}</Text>}
+          <Text>{JSON.stringify(error)}</Text>
+        </>
+      ) : (
+        <Text>{'Unknown error'}</Text>
+      )}
+    </ErrorBox>
   )
 }
 
 Error.getInitialProps = ({ res, err }: NextContext): IErrorProps => {
   const statusCode = res ? res.statusCode : undefined
-  return { statusCode, err }
+  return { statusCode, error: err }
 }
 
 export default Error

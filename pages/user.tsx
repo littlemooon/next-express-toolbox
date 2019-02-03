@@ -1,10 +1,11 @@
 import d from 'dot-prop'
 import Link from 'next/link'
 import { Component } from 'react'
+import Text from '../components/base/Text'
 import Layout from '../layout'
-import { AuthContext } from '../state/AuthState'
+import { ServerContext } from '../state/ServerState'
 
-class AboutPage extends Component<{ isServer: boolean }> {
+class UserPage extends Component<{ isServer: boolean }> {
   public static getInitialProps() {
     const isServer = typeof window === 'undefined'
     return { isServer }
@@ -13,37 +14,37 @@ class AboutPage extends Component<{ isServer: boolean }> {
   public render() {
     return (
       <Layout>
-        <AuthContext.Consumer>
-          {authState => (
+        <ServerContext.Consumer>
+          {serverState => (
             <>
               <section>
-                <p>
+                <Text>
                   This is another page of the SSR example, you accessed it{' '}
                   <strong>
                     {this.props.isServer ? 'server' : 'client'} side
                   </strong>
                   .
-                </p>
-                <p>You can reload to see how the page change.</p>
+                </Text>
+                <Text>You can reload to see how the page change.</Text>
                 <Link href="/">
                   <a>Go to Home</a>
                 </Link>
               </section>
 
-              {authState.user && (
+              {serverState.user && (
                 <section>
-                  {Object.keys(authState.user).map(k => {
-                    const v = d.get(authState, `user.${k}`)
-                    return <p key={k}>{`${k}: ${JSON.stringify(v)}`}</p>
+                  {Object.keys(serverState.user).map(k => {
+                    const v = d.get(serverState, `user.${k}`)
+                    return <Text key={k}>{`${k}: ${JSON.stringify(v)}`}</Text>
                   })}
                 </section>
               )}
             </>
           )}
-        </AuthContext.Consumer>
+        </ServerContext.Consumer>
       </Layout>
     )
   }
 }
 
-export default AboutPage
+export default UserPage

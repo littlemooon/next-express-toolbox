@@ -3,15 +3,18 @@ import d from 'dot-prop'
 import { ThemeProvider } from 'emotion-theming'
 import App, { Container, DefaultAppIProps, NextAppContext } from 'next/app'
 import theme from '../common/theme'
-import AuthProvider, { AuthContext, IAuthState } from '../state/AuthState'
 import StateProvider from '../state/index'
+import ServerProvider, {
+  IServerState,
+  ServerContext,
+} from '../state/ServerState'
 
 interface IAppPageProps {
-  authState: Partial<IAuthState>
+  serverState: Partial<IServerState>
 }
 
 export default class AppPage extends App<IAppPageProps> {
-  public static contextType = AuthContext
+  public static contextType = ServerContext
 
   public static getInitialProps = async ({
     ctx,
@@ -24,16 +27,17 @@ export default class AppPage extends App<IAppPageProps> {
     }
 
     return {
-      authState: {
+      serverState: {
         user: d.get(ctx, 'req.session.passport.user.profile'),
         token: d.get(ctx, 'req.session.token'),
+        isServerRendered: typeof window === 'undefined',
       },
       pageProps,
     }
   }
 
   public render() {
-    const { Component, pageProps, authState } = this.props
+    const { Component, pageProps, serverState } = this.props
     return (
       <>
         <Global
@@ -49,11 +53,11 @@ export default class AppPage extends App<IAppPageProps> {
         />
         <Container>
           <ThemeProvider theme={theme}>
-            <AuthProvider value={authState}>
+            <ServerProvider value={serverState}>
               <StateProvider>
                 <Component {...pageProps} />
               </StateProvider>
-            </AuthProvider>
+            </ServerProvider>
           </ThemeProvider>
         </Container>
       </>
