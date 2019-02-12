@@ -25,7 +25,7 @@ const Layout: NextFC<ILayoutProps> = ({
       </Head>
       <Box width={1}>
         <Header />
-        <Container as="main" pt={[3, 4, 5]}>
+        <Container as="main" py={[3, 4, 5]}>
           {children}
         </Container>
       </Box>

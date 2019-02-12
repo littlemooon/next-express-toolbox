@@ -1,4 +1,5 @@
 import isPropValid from '@emotion/is-prop-valid'
+import { CursorProperty } from 'csstype'
 import * as SS from 'styled-system'
 import styled, { StyledComponent } from '../../common/styled'
 
@@ -15,10 +16,17 @@ export interface IBoxProps
     SS.MinWidthProps,
     SS.HeightProps,
     SS.MaxHeightProps,
-    SS.MinHeightProps {
+    SS.MinHeightProps,
+    SS.DisplayProps {
+  cursor?: CursorProperty
   className?: string
   css?: string
 }
+
+const cursor = SS.style({
+  prop: 'cursor',
+  cssProperty: 'cursor',
+})
 
 const Box: StyledComponent<IBoxProps> = styled('div', {
   shouldForwardProp: prop =>
@@ -39,7 +47,9 @@ const Box: StyledComponent<IBoxProps> = styled('div', {
   SS.minWidth,
   SS.height,
   SS.maxHeight,
-  SS.minHeight
+  SS.minHeight,
+  SS.display,
+  cursor
 )
 
 Box.defaultProps = {

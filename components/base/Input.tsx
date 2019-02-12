@@ -1,13 +1,24 @@
 import { InputHTMLAttributes } from 'react'
-import * as SS from 'styled-system'
 import styled, { StyledComponent } from '../../common/styled'
+import Box, { IBoxProps } from './Box'
 
-export type InputType = 'string' | 'number' | 'file'
+const Input: StyledComponent<
+  IBoxProps & InputHTMLAttributes<HTMLInputElement>
+> = styled(Box)`
+  border: ${p => p.theme.bd.input};
 
-export interface IInputProps
-  extends InputHTMLAttributes<HTMLInputElement>,
-    SS.SpaceProps {}
+  :hover,
+  :focus,
+  :active {
+    border: ${p => p.theme.bd.inputActive};
+  }
+`
 
-const Input: StyledComponent<IInputProps> = styled('input')(SS.space)
+Input.defaultProps = {
+  as: 'input',
+  p: 2,
+  fontSize: 2,
+  borderRadius: 4,
+}
 
 export default Input

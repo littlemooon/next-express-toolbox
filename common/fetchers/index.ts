@@ -8,4 +8,4 @@ export const fileListFetcher = new Fetch<IFileList>('/csv')
 
 export const csvFetcher = new Fetch<object[]>('/csv')
 
-export const githubRepoFetcher = new FetchGithub('/api/github/repos')
+export const githubRepoFetcher = new FetchGithub('/github/repos')

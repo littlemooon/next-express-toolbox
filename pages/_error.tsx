@@ -7,7 +7,7 @@ export interface IErrorProps {
   error?: any
 }
 
-const Error: NextFC<IErrorProps> = ({ error, statusCode }) => {
+const ErrorPage: NextFC<IErrorProps> = ({ error, statusCode }) => {
   const header = statusCode
     ? `An error ${statusCode} occurred on server`
     : 'An error occurred on client'
@@ -26,9 +26,9 @@ const Error: NextFC<IErrorProps> = ({ error, statusCode }) => {
   )
 }
 
-Error.getInitialProps = ({ res, err }: NextContext): IErrorProps => {
+ErrorPage.getInitialProps = ({ res, err }: NextContext): IErrorProps => {
   const statusCode = res ? res.statusCode : undefined
   return { statusCode, error: err }
 }
 
-export default Error
+export default ErrorPage

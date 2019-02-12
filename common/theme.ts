@@ -1,4 +1,4 @@
-interface Colors {
+interface IColors {
   black: string
   blue: string
   blueDark: string
@@ -16,7 +16,7 @@ interface Colors {
   white: string
 }
 
-const colors: Colors = {
+const colors: IColors = {
   black: '#18212e',
   blue: '#449bf7',
   blueDark: '#084a96',
@@ -37,7 +37,7 @@ const colors: Colors = {
 export type Pixels = string
 
 export interface ITheme {
-  colors: Colors
+  colors: IColors
   brand: string
   cta: string
   white: string
@@ -146,9 +146,9 @@ const theme: ITheme = {
     primary: `1px solid ${colors.greyBorder}`,
     secondary: `1px solid ${colors.greyBlue}`,
     dotted: '2px dotted rgba(0, 0, 0, 0.08)',
-    input: `2px solid ${colors.greyBlue}`,
-    inputActive: `2px solid ${colors.greyDark}`,
-    inputReadonly: `2px dotted ${colors.greyDark}`,
+    input: `1px solid ${colors.greyBlue}`,
+    inputActive: `1px solid ${colors.blue}`,
+    inputReadonly: `apx dotted ${colors.greyDark}`,
     step: `1px solid ${colors.greyBlue}`,
     tab: `1px solid ${colors.greyBorder}`,
     tabActive: `1px solid ${colors.green}`,

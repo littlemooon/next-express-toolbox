@@ -1,3 +1,4 @@
+import { TextDecorationProperty } from 'csstype'
 import * as SS from 'styled-system'
 import styled, { StyledComponent } from '../../common/styled'
 import Box, { IBoxProps } from './Box'
@@ -8,18 +9,27 @@ export interface ITextProps
     SS.FontWeightProps,
     SS.TextAlignProps,
     SS.LineHeightProps,
-    SS.LetterSpacingProps {}
+    SS.LetterSpacingProps {
+  textDecoration?: TextDecorationProperty | TextDecorationProperty[]
+}
+
+const textDecoration = SS.style({
+  prop: 'textDecoration',
+  cssProperty: 'textDecoration',
+})
 
 const Text: StyledComponent<ITextProps> = styled(Box)(
   SS.fontFamily,
   SS.fontWeight,
   SS.textAlign,
   SS.lineHeight,
-  SS.letterSpacing
+  SS.letterSpacing,
+  textDecoration
 )
 
 Text.defaultProps = {
   as: 'p',
+  m: 0,
 }
 
 export const TextH1: StyledComponent<ITextProps> = styled(Text)()
@@ -27,6 +37,8 @@ export const TextH1: StyledComponent<ITextProps> = styled(Text)()
 TextH1.defaultProps = {
   as: 'h1',
   m: 0,
+  fontSize: 4,
+  fontWeight: 'bold',
 }
 
 export const TextH2: StyledComponent<ITextProps> = styled(Text)()
@@ -34,7 +46,7 @@ export const TextH2: StyledComponent<ITextProps> = styled(Text)()
 TextH2.defaultProps = {
   as: 'h2',
   m: 0,
-  fontSize: 4,
+  fontSize: 3,
   fontWeight: 'bold',
 }
 
@@ -42,24 +54,44 @@ export const TextH3: StyledComponent<ITextProps> = styled(Text)()
 
 TextH3.defaultProps = {
   as: 'h3',
+  m: 0,
+  fontSize: 2,
+  fontWeight: 'bold',
 }
 
 export const TextH4: StyledComponent<ITextProps> = styled(Text)()
 
 TextH4.defaultProps = {
   as: 'h4',
+  m: 0,
+  fontSize: 1,
+  fontWeight: 'bold',
 }
 
 export const TextH5: StyledComponent<ITextProps> = styled(Text)()
 
 TextH5.defaultProps = {
   as: 'h5',
+  m: 0,
+  fontWeight: 'bold',
 }
 
 export const TextH6: StyledComponent<ITextProps> = styled(Text)()
 
 TextH6.defaultProps = {
   as: 'h6',
+  m: 0,
+  fontWeight: 'bold',
+}
+
+export const TextA: StyledComponent<ITextProps> = styled(Text)()
+
+TextA.defaultProps = {
+  as: 'a',
+  m: 0,
+  color: 'blue',
+  cursor: 'pointer',
+  textDecoration: 'underline',
 }
 
 export default Text
