@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "name": "next-ssr",
+  "name": "next-express-toolbox",
   "builds": [
     { "src": "server/index.ts", "use": "@now/node-server" }
   ]
