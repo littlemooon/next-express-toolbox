@@ -1,7 +1,7 @@
 import to from 'await-to-js'
 import fetch from 'isomorphic-unfetch'
 import qs from 'query-string'
-import { BASE_URL } from './config'
+import { BASE_URL } from './constants'
 import { startsWith } from './string'
 
 export enum FetchState {

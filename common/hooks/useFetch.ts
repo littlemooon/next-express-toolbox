@@ -20,14 +20,14 @@ export interface IFetch<T> extends IFetchState<T> {
 export interface IFetchOpts<T> {
   additionalUrl?: string
   cacheState?: ICache<T>
-  autoRun?: boolean
+  runOnMount?: boolean
 }
 
 export default function useFetch<T>(
   fetcher: Fetch<T>,
   opts: IFetchOpts<T> = {}
 ): IFetch<T> {
-  const { additionalUrl, cacheState, autoRun } = opts
+  const { additionalUrl, cacheState, runOnMount } = opts
 
   const url = fetcher.getUrl(additionalUrl)
   const cached = cacheState && cacheState.get(url)
@@ -113,7 +113,7 @@ export default function useFetch<T>(
   }
 
   useEffect(() => {
-    if (autoRun) {
+    if (runOnMount) {
       fetchData()
     }
     return cleanup
