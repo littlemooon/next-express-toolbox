@@ -13,7 +13,6 @@ export interface ICsvProps {
 
 const Csv: SFC<ICsvProps> = props => {
   const csvFetch = useFetch(csvFetcher, {
-    autoRun: false,
     additionalUrl: `/${props.filename}`,
   })
 
@@ -37,7 +36,7 @@ const Csv: SFC<ICsvProps> = props => {
       <Table headers={headers} rows={rows} />
     </>
   ) : csvFetch.state === FetchState.ERROR ? (
-    <ErrorBox header="Failed to load csv file">{csvFetch.error}</ErrorBox>
+    <ErrorBox header="Failed to load csv file" error={csvFetch.error} />
   ) : (
     <Spinner />
   )

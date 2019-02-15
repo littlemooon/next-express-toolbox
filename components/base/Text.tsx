@@ -36,7 +36,8 @@ export const TextH1: StyledComponent<ITextProps> = styled(Text)()
 
 TextH1.defaultProps = {
   as: 'h1',
-  m: 0,
+  mx: 0,
+  my: 3,
   fontSize: 4,
   fontWeight: 'bold',
 }
@@ -45,7 +46,8 @@ export const TextH2: StyledComponent<ITextProps> = styled(Text)()
 
 TextH2.defaultProps = {
   as: 'h2',
-  m: 0,
+  mx: 0,
+  my: 2,
   fontSize: 3,
   fontWeight: 'bold',
 }
@@ -54,7 +56,8 @@ export const TextH3: StyledComponent<ITextProps> = styled(Text)()
 
 TextH3.defaultProps = {
   as: 'h3',
-  m: 0,
+  mx: 0,
+  my: 1,
   fontSize: 2,
   fontWeight: 'bold',
 }
@@ -63,7 +66,8 @@ export const TextH4: StyledComponent<ITextProps> = styled(Text)()
 
 TextH4.defaultProps = {
   as: 'h4',
-  m: 0,
+  mx: 0,
+  my: 1,
   fontSize: 1,
   fontWeight: 'bold',
 }
@@ -72,7 +76,8 @@ export const TextH5: StyledComponent<ITextProps> = styled(Text)()
 
 TextH5.defaultProps = {
   as: 'h5',
-  m: 0,
+  mx: 0,
+  my: 1,
   fontWeight: 'bold',
 }
 
@@ -80,7 +85,8 @@ export const TextH6: StyledComponent<ITextProps> = styled(Text)()
 
 TextH6.defaultProps = {
   as: 'h6',
-  m: 0,
+  mx: 0,
+  my: 1,
   fontWeight: 'bold',
 }
 

@@ -2,14 +2,14 @@ import * as cookieParser from 'cookie-parser'
 import * as express from 'express'
 import * as morgan from 'morgan'
 import * as next from 'next'
-import { DEV, PORT } from '../common/config'
+import { DEV, PORT } from '../common/constants'
 import { error, log } from '../common/log'
 import { startsWith } from '../common/string'
-import api from './api'
-import auth from './auth'
-import csv from './csv'
 import env from './env'
-import pdf from './pdf'
+import api from './routes/api'
+import auth from './routes/auth'
+import csv from './routes/csv'
+import pdf from './routes/pdf'
 
 // tslint:disable-next-line:no-var-requires
 const cookieSession = require('cookie-session')
@@ -54,7 +54,7 @@ app
       log(`> Ready on http://localhost:${PORT}`)
     })
   })
-  .catch(ex => {
-    error(ex.stack)
+  .catch(e => {
+    error('server/index', e)
     process.exit(1)
   })

@@ -27,7 +27,7 @@ export default function useFetch<T>(
   fetcher: Fetch<T>,
   opts: IFetchOpts<T> = {}
 ): IFetch<T> {
-  const { additionalUrl, cacheState, autoRun = true } = opts
+  const { additionalUrl, cacheState, autoRun } = opts
 
   const url = fetcher.getUrl(additionalUrl)
   const cached = cacheState && cacheState.get(url)

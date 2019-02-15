@@ -1,8 +1,8 @@
 import * as express from 'express'
 import * as puppeteer from 'puppeteer'
 import * as qs from 'query-string'
-import { BASE_URL } from '../common/config'
-import { error } from '../common/log'
+import { BASE_URL } from '../../common/constants'
+import { error } from '../../common/log'
 
 async function renderPdf(req: express.Request, res: express.Response) {
   try {
@@ -21,7 +21,7 @@ async function renderPdf(req: express.Request, res: express.Response) {
 
     browser.close()
   } catch (e) {
-    error(e)
+    error('routes/pdf', e)
     res.status(500).send({ status: 'unknown_error', message: e.message })
   }
 }

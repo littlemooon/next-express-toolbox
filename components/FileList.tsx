@@ -18,6 +18,7 @@ const FileList: SFC<IFileListProps> = props => {
   )
 
   const csvFetch = useFetch<IFileList>(fileListFetcher, {
+    runOnMount: true,
     cacheState,
   })
 

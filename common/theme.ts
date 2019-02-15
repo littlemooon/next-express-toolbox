@@ -78,6 +78,7 @@ export interface ITheme {
     box: string
     boxActive: string
     card: string
+    error: string
   }
   bp: {
     mobile: Pixels
@@ -156,6 +157,7 @@ const theme: ITheme = {
     box: `1px solid ${colors.greyBorder}`,
     boxActive: `1px solid ${colors.green}`,
     card: `1px solid ${colors.greyBorder}`,
+    error: `1px solid ${colors.redDark}`,
   },
 
   // breakpoints

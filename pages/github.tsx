@@ -32,6 +32,7 @@ const GithubPage: NextFC<IGithubProps> = props => {
   const githubFetch = useFetch<IGithubData>(githubRepoFetcher, {
     additionalUrl: `/${debouncedRepo}`,
     cacheState,
+    runOnMount: true,
   })
 
   const onChange = (e: SyntheticEvent<HTMLInputElement>) => {
@@ -60,9 +61,10 @@ const GithubPage: NextFC<IGithubProps> = props => {
               })}
           </Card>
         ) : githubFetch.state === FetchState.ERROR ? (
-          <ErrorBox header={`Failed fetch github repo: ${repo}`}>
-            {githubFetch.error && githubFetch.error.message}
-          </ErrorBox>
+          <ErrorBox
+            header={`Failed fetch github repo: ${repo}`}
+            error={githubFetch.error}
+          />
         ) : null}
       </div>
     </Layout>

@@ -38,7 +38,11 @@ const IndexPage: NextFC = () => {
         <Button>Button</Button>
         <Input placeholder="input" />
         <Spinner />
-        <ErrorBox header="Test error">{'some message'}</ErrorBox>
+        <ErrorBox header="Test error with children">{'some text'}</ErrorBox>
+        <ErrorBox
+          header="Test error with error"
+          error={new Error('bloop bloop')}
+        />
       </Card>
     </Layout>
   )
