@@ -8,7 +8,7 @@ import { ServerContext } from '../state/ServerState'
 
 const onLogout = () => {
   removeStorage(StorageKey.AUTH_STATE)
-  logoutFetcher.get()
+  logoutFetcher.get({})
 }
 
 const Nav: SFC = () => {
@@ -26,9 +26,9 @@ const Nav: SFC = () => {
           <a>User</a>
         </Button>
       </Link>
-      <Link href="/csv">
+      <Link href="/file">
         <Button>
-          <a>Csv</a>
+          <a>File</a>
         </Button>
       </Link>
       <Link href="/github">
@@ -44,7 +44,7 @@ const Nav: SFC = () => {
           </Button>
         </Link>
       ) : (
-        <Link href="/auth/google">
+        <Link href="/api/auth/google">
           <Button bg={theme.white} color={theme.tx.primary}>
             Login
           </Button>

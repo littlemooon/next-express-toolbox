@@ -1,25 +1,16 @@
-import { SFC, useCallback } from 'react'
+import { SFC, useCallback, useEffect } from 'react'
 import { fileListFetcher } from '../common/fetchers'
-import useCache from '../common/hooks/useCache'
 import useFetch from '../common/hooks/useFetch'
-import { IFileList } from '../common/types'
 import { CacheKey } from '../state/CacheState'
 import Text from './base/Text'
 
 export interface IFileListProps {
-  fileListFetcher: typeof fileListFetcher
   onSelect: (filename: string) => void
 }
 
 const FileList: SFC<IFileListProps> = props => {
-  const cacheState = useCache<IFileList>(
-    CacheKey.CSV_LIST,
-    props.fileListFetcher
-  )
-
-  const csvFetch = useFetch<IFileList>(fileListFetcher, {
-    runOnMount: true,
-    cacheState,
+  const csvFetch = useFetch(CacheKey.FILE_LIST, fileListFetcher, {
+    initialUrlParams: {},
   })
 
   const onClick = useCallback(
@@ -27,9 +18,13 @@ const FileList: SFC<IFileListProps> = props => {
     []
   )
 
+  useEffect(() => {
+    csvFetch.get({})
+  }, [])
+
   return csvFetch.data ? (
     <>
-      {csvFetch.data.map(filename => (
+      {csvFetch.data.map((filename: string) => (
         <p key={filename} onClick={onClick(filename)}>
           {filename}
         </p>

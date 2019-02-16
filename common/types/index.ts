@@ -4,7 +4,13 @@ export enum DeviceType {
   android = 'android',
 }
 
-export type IFileList = string[]
+export type TFileList = string[]
+
+export type TCsvFile = object[]
+
+export type TJsonFile = object
+
+export type TFile = TCsvFile | TJsonFile
 
 export interface IAuthUser {
   id: string

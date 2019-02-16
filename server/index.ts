@@ -8,7 +8,7 @@ import { startsWith } from '../common/string'
 import env from './env'
 import api from './routes/api'
 import auth from './routes/auth'
-import csv from './routes/csv'
+import file from './routes/file'
 import pdf from './routes/pdf'
 
 // tslint:disable-next-line:no-var-requires
@@ -41,7 +41,7 @@ app
 
     server.use('/api/pdf', pdf())
 
-    server.use('/api/csv', csv())
+    server.use('/api/file', file())
 
     server.use('/api', api())
 

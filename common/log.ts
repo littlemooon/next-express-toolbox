@@ -10,4 +10,6 @@ export function error(id: string, err: Error) {
   console.error(chalk.red(err.name), chalk.yellow(id), err.message)
   // tslint:disable-next-line:no-console
   console.error(err)
+  // tslint:disable-next-line:no-console
+  console.trace()
 }

@@ -1,6 +1,5 @@
 import to from 'await-to-js'
 import fetch from 'isomorphic-unfetch'
-import qs from 'query-string'
 import { BASE_URL } from './constants'
 import { startsWith } from './string'
 
@@ -15,27 +14,24 @@ export interface IFetchResponse<T> {
   data?: T
   state: FetchState
   error?: Error
+  url: string
 }
 
-export interface IFetchOpts<Q> {
-  query?: Partial<Q>
-  fetchOpts?: RequestInit
-}
+export type ConstructUrl<P> = (urlParams: P) => string
 
-export default class Fetch<T, Q extends object = {}> {
-  public baseUrl: string
-  public lastUrl: string = ''
-  public opts: IFetchOpts<Q>
-  public data?: T
+const noop = () => ''
 
-  constructor(
-    baseUrl: string,
-    opts: IFetchOpts<Q> = { query: {}, fetchOpts: {} }
-  ) {
-    this.baseUrl = startsWith(baseUrl, '/')
-      ? `${BASE_URL}/api${baseUrl}`
-      : baseUrl
-    this.opts = opts
+export default class Fetch<T, P extends object = {}> {
+  public opts: RequestInit
+  public constructUrl: ConstructUrl<P> = noop
+  public lastResponse: IFetchResponse<T> = {
+    state: FetchState.INITIAL,
+    url: '',
+  }
+
+  constructor(constructUrl: ConstructUrl<P>, opts?: RequestInit) {
+    this.constructUrl = constructUrl
+    this.opts = opts || {}
   }
 
   public transformBody = async (res: Response): Promise<T> => {
@@ -43,74 +39,66 @@ export default class Fetch<T, Q extends object = {}> {
     return json
   }
 
-  public getUrl = (url: string = '', query: Partial<Q> = {}): string => {
-    const queryString = qs.stringify({ ...query, ...(this.opts.query || {}) })
-    return [`${this.baseUrl}${url}`, queryString].join('?')
+  public getUrl = (urlParams: P): string => {
+    const url = this.constructUrl(urlParams)
+    return startsWith(url, '/') ? `${BASE_URL}/api${url}` : url
+  }
+
+  public saveResponse = (response: IFetchResponse<T>) => {
+    this.lastResponse = response
+    return response
   }
 
   public async call(
-    additionalUrl?: string,
-    opts?: Partial<IFetchOpts<Q>>
+    urlParams: P,
+    opts: RequestInit = {}
   ): Promise<IFetchResponse<T>> {
-    const query = {
-      ...(this.opts.query || {}),
-      ...((opts && opts.query) || {}),
-    }
-    const fetchOpts = {
-      ...(this.opts.fetchOpts || {}),
-      ...((opts && opts.fetchOpts) || {}),
-    }
-    const url = this.getUrl(additionalUrl, query)
-    this.lastUrl = url
+    const url = this.getUrl(urlParams)
 
     try {
-      const res = await fetch(url, fetchOpts)
+      const [err, res] = await to(
+        fetch(url, {
+          ...this.opts,
+          ...opts,
+        })
+      )
 
-      if (res.ok) {
+      if (res && res.ok) {
         const data = await this.transformBody(res)
-        this.data = data
-        return {
+        return this.saveResponse({
+          url,
           state: FetchState.SUCCESS,
           data,
-        }
+        })
       } else {
-        this.data = undefined
-        return {
+        return this.saveResponse({
+          url,
           state: FetchState.ERROR,
-          error: new Error(res.statusText),
-        }
+          error: new Error(
+            err || (res ? res.statusText : `Unknown error fetching: ${url}`)
+          ),
+        })
       }
     } catch (e) {
-      this.data = undefined
-      return {
+      return this.saveResponse({
+        url,
         state: FetchState.ERROR,
         error: e,
-      }
+      })
     }
   }
 
-  public async get(
-    additionalUrl: string = '',
-    opts: Partial<IFetchOpts<Q>> = {}
-  ) {
-    return to(
-      this.call(additionalUrl, {
-        ...opts,
-        fetchOpts: { method: 'GET', ...(opts.fetchOpts || {}) },
-      })
-    )
+  public async get(urlParams: P, opts?: RequestInit) {
+    return this.call(urlParams, {
+      method: 'GET',
+      ...opts,
+    })
   }
 
-  public async post(
-    additionalUrl: string = '',
-    body: BodyInit,
-    opts: Partial<IFetchOpts<Q>> = {}
-  ) {
-    return to(
-      this.call(additionalUrl, {
-        ...opts,
-        fetchOpts: { method: 'POST', body, ...(opts.fetchOpts || {}) },
-      })
-    )
+  public async post(urlParams: P, opts?: RequestInit) {
+    return this.call(urlParams, {
+      method: 'POST',
+      ...opts,
+    })
   }
 }

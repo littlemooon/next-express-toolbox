@@ -1,10 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { ICache } from '../../state/CacheState'
+import { CacheKey } from '../../state/CacheState'
 import Fetch, { FetchState } from '../Fetch'
-
-export interface IFetchCallOpts {
-  noCache?: boolean
-}
+import useCache from './useCache'
 
 export interface IFetchState<T> {
   data?: T
@@ -12,43 +9,53 @@ export interface IFetchState<T> {
   error?: Error
 }
 
-export interface IFetch<T> extends IFetchState<T> {
+export interface IFetchCallOpts extends RequestInit {
+  force?: boolean
+  method: 'get' | 'post'
+}
+
+export interface IFetch<T, P> extends IFetchState<T> {
   abort: () => void
-  get: (opts: IFetchCallOpts) => void
+  get: (urlParams: P, opts?: Partial<IFetchCallOpts>) => void
+  post: (urlParams: P, opts?: Partial<IFetchCallOpts>) => void
 }
 
-export interface IFetchOpts<T> {
-  additionalUrl?: string
-  cacheState?: ICache<T>
-  runOnMount?: boolean
+export interface IFetchOpts<P> {
+  initialUrlParams?: P
 }
 
-export default function useFetch<T>(
-  fetcher: Fetch<T>,
-  opts: IFetchOpts<T> = {}
-): IFetch<T> {
-  const { additionalUrl, cacheState, runOnMount } = opts
+export default function useFetch<T, P extends object = {}>(
+  cacheKey: CacheKey,
+  fetcher: Fetch<T, P>,
+  opts: IFetchOpts<P> = {}
+): IFetch<T, P> {
+  const { initialUrlParams } = opts
 
-  const url = fetcher.getUrl(additionalUrl)
-  const cached = cacheState && cacheState.get(url)
   const abortController = useRef<AbortController | undefined>(undefined)
 
+  const cache = useCache<T>(cacheKey)
+  const initialUrl = initialUrlParams ? fetcher.getUrl(initialUrlParams) : ''
+  const initialData = cache && cache.get(initialUrl)
+
   const [fetchState, setFetchState] = useState<IFetchState<T>>({
-    state: cached ? FetchState.SUCCESS : FetchState.INITIAL,
-    data: cached,
+    state: initialData ? FetchState.SUCCESS : FetchState.INITIAL,
+    data: initialData,
   })
 
-  const fetchData = async ({ noCache }: IFetchCallOpts = {}) => {
-    const nextUrl = fetcher.getUrl(additionalUrl)
+  const call = async (
+    urlParams: P,
+    { force, method, ...fetchOpts }: IFetchCallOpts = { method: 'get' }
+  ) => {
+    const url = fetcher.getUrl(urlParams)
     const controller = new AbortController()
     abortController.current = controller
 
-    if (!noCache && cacheState) {
-      const nextCached = cacheState.get(nextUrl)
-      if (nextCached) {
+    if (!force && cache) {
+      const cached = cache.get(url)
+      if (cached) {
         setFetchState({
           state: FetchState.SUCCESS,
-          data: nextCached,
+          data: cached,
           error: undefined,
         })
         abortController.current = undefined
@@ -63,28 +70,19 @@ export default function useFetch<T>(
     })
 
     try {
-      const [err, fetchResponse] = await fetcher.get(additionalUrl, {
-        fetchOpts: {
-          signal: abortController.current.signal,
-        },
+      const res = await fetcher[method](urlParams, {
+        signal: abortController.current.signal,
+        ...fetchOpts,
       })
 
-      if (fetchResponse && !err) {
-        setFetchState(fetchResponse)
+      if (res) {
+        setFetchState(res)
 
-        if (
-          cacheState &&
-          fetchResponse.state === FetchState.SUCCESS &&
-          fetchResponse.data
-        ) {
-          cacheState.set(url, fetchResponse.data)
+        if (cache && res.state === FetchState.SUCCESS && res.data) {
+          cache.set(url, res.data)
         }
       } else {
-        setFetchState({
-          state: FetchState.ERROR,
-          data: undefined,
-          error: err || undefined,
-        })
+        throw new Error(`Failed to fetch: ${method.toUpperCase()} ${url}`)
       }
       abortController.current = undefined
     } catch (e) {
@@ -99,6 +97,12 @@ export default function useFetch<T>(
     }
   }
 
+  const get = (urlParams: P, o1?: Partial<IFetchCallOpts>) =>
+    call(urlParams, { method: 'get', ...o1 })
+
+  const post = (urlParams: P, o2?: Partial<IFetchCallOpts>) =>
+    call(urlParams, { method: 'post', ...o2 })
+
   const abort = useCallback(() => {
     if (abortController && abortController.current) {
       abortController.current.abort()
@@ -112,16 +116,12 @@ export default function useFetch<T>(
     }
   }
 
-  useEffect(() => {
-    if (runOnMount) {
-      fetchData()
-    }
-    return cleanup
-  }, [additionalUrl])
+  useEffect(() => cleanup, [])
 
   return {
     ...fetchState,
     abort,
-    get: fetchData,
+    get,
+    post,
   }
 }

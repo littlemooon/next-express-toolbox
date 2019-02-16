@@ -29,13 +29,16 @@ export function readFileAsync(filename: string) {
 
 export function readDirAsync(dir: string) {
   return new Promise((resolve, reject) => {
-    fs.readdir(dir, (err, data) => {
+    fs.readdir(dir, { withFileTypes: true }, (err, data) => {
       if (err) {
         error('readDirAsync:', err)
         reject(err)
-      } else {
-        resolve(data)
       }
+      const filesNames = data
+        .filter(dirent => !dirent.isDirectory())
+        .map(dirent => dirent.name)
+
+      resolve(filesNames)
     })
   })
 }

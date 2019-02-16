@@ -2,8 +2,14 @@ import { css, Global } from '@emotion/core'
 import d from 'dot-prop'
 import { ThemeProvider } from 'emotion-theming'
 import App, { Container, DefaultAppIProps, NextAppContext } from 'next/app'
+import { IFetchResponse } from '../common/Fetch'
 import theme from '../common/theme'
-import StateProvider from '../state/index'
+import {
+  CacheKey,
+  CacheProvider,
+  createCacheFromFetch,
+  IAppCache,
+} from '../state/CacheState'
 import ServerProvider, {
   IServerState,
   ServerContext,
@@ -11,6 +17,7 @@ import ServerProvider, {
 
 interface IAppPageProps {
   serverState: Partial<IServerState>
+  cache: IAppCache
 }
 
 export default class AppPage extends App<IAppPageProps> {
@@ -20,11 +27,17 @@ export default class AppPage extends App<IAppPageProps> {
     ctx,
     Component,
   }: NextAppContext): Promise<DefaultAppIProps & IAppPageProps> => {
-    let pageProps = {}
+    const {
+      initialCache = new Map(),
+      ...pageProps
+    }: {
+      initialCache?: Map<CacheKey, IFetchResponse<any>>
+    } = Component.getInitialProps ? await Component.getInitialProps(ctx) : {}
 
-    if (Component.getInitialProps) {
-      pageProps = await Component.getInitialProps(ctx)
-    }
+    const cache = Array.from(initialCache.entries()).reduce(
+      (acc, [key, value]) => ({ ...acc, [key]: createCacheFromFetch(value) }),
+      {}
+    )
 
     return {
       serverState: {
@@ -32,12 +45,13 @@ export default class AppPage extends App<IAppPageProps> {
         token: d.get(ctx, 'req.session.token'),
         isServerRendered: typeof window === 'undefined',
       },
+      cache,
       pageProps,
     }
   }
 
   public render() {
-    const { Component, pageProps, serverState } = this.props
+    const { Component, pageProps, serverState, cache } = this.props
     return (
       <>
         <Global
@@ -54,9 +68,9 @@ export default class AppPage extends App<IAppPageProps> {
         <Container>
           <ThemeProvider theme={theme}>
             <ServerProvider value={serverState}>
-              <StateProvider>
+              <CacheProvider cache={cache}>
                 <Component {...pageProps} />
-              </StateProvider>
+              </CacheProvider>
             </ServerProvider>
           </ThemeProvider>
         </Container>

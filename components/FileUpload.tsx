@@ -1,18 +1,19 @@
 import { ChangeEvent, SFC, useCallback, useEffect, useState } from 'react'
-import Fetch from '../common/Fetch'
-import { fileListFetcher } from '../common/fetchers'
+import { FetchState } from '../common/Fetch'
+import { fileListFetcher } from '../common/fetchers/index'
+import useFetch from '../common/hooks/useFetch'
+import { CacheKey } from '../state/CacheState'
+import ErrorBox from './base/ErrorBox'
 import Input from './base/Input'
+import Spinner from './base/Spinner'
+import Text from './base/Text'
 
 export interface IFileUploadProps {
   type?: 'text/csv'
   multiple?: boolean
 }
 
-export interface IFileData {
-  files?: FileList
-}
-
-function uploadFiles(fetcher: Fetch<any>, files: FileList) {
+function getFormData(files: FileList) {
   const formData = new FormData()
 
   Array.from(new Array(files.length)).map((_, i) => {
@@ -22,37 +23,47 @@ function uploadFiles(fetcher: Fetch<any>, files: FileList) {
     }
   })
 
-  return fetcher.post('', formData)
+  return formData
 }
 
 const FileUpload: SFC<IFileUploadProps> = props => {
-  const [data, setData] = useState<IFileData>({})
+  const [files, setFiles] = useState<FileList | null | undefined>(undefined)
+  const fetch = useFetch(CacheKey.FILE_LIST, fileListFetcher)
 
   const onChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setData({
-      files: e.target.files || undefined,
-    })
+    setFiles(e.target.files)
   }, [])
 
   useEffect(() => {
-    if (data.files) {
-      uploadFiles(fileListFetcher, data.files)
-      setData({})
+    if (files) {
+      fetch.post({}, { body: getFormData(files) })
+      setFiles(undefined)
     }
-  }, [data])
+  }, [files])
 
   return (
-    <Input
-      type="file"
-      accept={props.type}
-      onChange={onChange}
-      multiple={props.multiple}
-    />
+    <>
+      <Text>Select files to upload:</Text>
+      {fetch.state === FetchState.LOADING ? (
+        <Spinner />
+      ) : fetch.state === FetchState.ERROR ? (
+        <ErrorBox header="Failed to upload file" error={fetch.error} />
+      ) : (
+        ''
+      )}
+      <Input
+        type="file"
+        accept={props.type}
+        onChange={onChange}
+        multiple={props.multiple}
+      />
+    </>
   )
 }
 
 FileUpload.defaultProps = {
-  type: 'text/csv',
+  // type: 'text/csv',
   multiple: true,
 }
+
 export default FileUpload

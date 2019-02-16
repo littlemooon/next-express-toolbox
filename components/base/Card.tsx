@@ -24,8 +24,9 @@ const Card: StyledComponent<ICardProps> = styled(Flex)(
 Card.defaultProps = {
   ...Flex.defaultProps,
   boxShadow: theme.bs[1],
-  borderRadius: 8,
+  borderRadius: 4,
   p: 3,
+  mb: 3,
 }
 
 export default Card
