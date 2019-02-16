@@ -50,7 +50,7 @@ export default function useFetch<T, P extends object = {}>(
     const controller = new AbortController()
     abortController.current = controller
 
-    if (!force && cache) {
+    if (!force && cache && method === 'get') {
       const cached = cache.get(url)
       if (cached) {
         setFetchState({

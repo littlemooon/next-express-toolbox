@@ -54,22 +54,28 @@ export default class Fetch<T, P extends object = {}> {
     opts: RequestInit = {}
   ): Promise<IFetchResponse<T>> {
     const url = this.getUrl(urlParams)
+    const fetchOpts = {
+      ...this.opts,
+      ...opts,
+    }
 
     try {
-      const [err, res] = await to(
-        fetch(url, {
-          ...this.opts,
-          ...opts,
-        })
-      )
+      const [err, res] = await to(fetch(url, fetchOpts))
 
       if (res && res.ok) {
-        const data = await this.transformBody(res)
-        return this.saveResponse({
-          url,
-          state: FetchState.SUCCESS,
-          data,
-        })
+        if (fetchOpts.method === 'GET') {
+          const data = await this.transformBody(res)
+          return this.saveResponse({
+            url,
+            state: FetchState.SUCCESS,
+            data,
+          })
+        } else {
+          return {
+            url,
+            state: FetchState.SUCCESS,
+          }
+        }
       } else {
         return this.saveResponse({
           url,

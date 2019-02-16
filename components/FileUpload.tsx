@@ -1,9 +1,12 @@
-import { ChangeEvent, SFC, useCallback, useEffect, useState } from 'react'
+import { SFC, useRef } from 'react'
 import { FetchState } from '../common/Fetch'
 import { fileListFetcher } from '../common/fetchers/index'
 import useFetch from '../common/hooks/useFetch'
+import theme from '../common/theme'
 import { CacheKey } from '../state/CacheState'
+import Button from './base/Button'
 import ErrorBox from './base/ErrorBox'
+import Flex from './base/Flex'
 import Input from './base/Input'
 import Spinner from './base/Spinner'
 import Text from './base/Text'
@@ -27,36 +30,39 @@ function getFormData(files: FileList) {
 }
 
 const FileUpload: SFC<IFileUploadProps> = props => {
-  const [files, setFiles] = useState<FileList | null | undefined>(undefined)
+  const ref = useRef<HTMLInputElement | undefined>(undefined)
   const fetch = useFetch(CacheKey.FILE_LIST, fileListFetcher)
 
-  const onChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setFiles(e.target.files)
-  }, [])
-
-  useEffect(() => {
-    if (files) {
-      fetch.post({}, { body: getFormData(files) })
-      setFiles(undefined)
+  const onUpload = async () => {
+    if (ref.current) {
+      const files = ref.current.files
+      if (files && files.length) {
+        await fetch.post({}, { body: getFormData(files) })
+        ref.current.files = null
+        ref.current.value = ''
+      }
     }
-  }, [files])
+  }
 
   return (
     <>
-      <Text>Select files to upload:</Text>
-      {fetch.state === FetchState.LOADING ? (
-        <Spinner />
-      ) : fetch.state === FetchState.ERROR ? (
-        <ErrorBox header="Failed to upload file" error={fetch.error} />
-      ) : (
-        ''
-      )}
-      <Input
-        type="file"
-        accept={props.type}
-        onChange={onChange}
-        multiple={props.multiple}
-      />
+      <Flex alignItems="flex-start">
+        <Text mb={2}>Select files to upload:</Text>
+        {fetch.state === FetchState.ERROR && (
+          <ErrorBox header="Failed to upload file" error={fetch.error} />
+        )}
+        <Input
+          type="file"
+          accept={props.type}
+          multiple={props.multiple}
+          ref={ref}
+          mb={2}
+        />
+        <Button onClick={onUpload}>
+          Upload
+          {fetch.state === FetchState.LOADING && <Spinner bg={theme.white} />}
+        </Button>
+      </Flex>
     </>
   )
 }

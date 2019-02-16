@@ -7,34 +7,10 @@ import * as path from 'path'
 import { FILE_DIR } from '../../common/constants'
 import { error } from '../../common/log'
 import { endsWith } from '../../common/string'
-import { readDirAsync, readFileAsync } from '../utils/file'
+import { readDirAsync, readFileAsync } from '../utils/file-utils'
 
 if (!fs.existsSync(FILE_DIR)) {
   fs.mkdirSync(FILE_DIR)
-}
-
-async function saveFile(req: express.Request, res: express.Response) {
-  try {
-    const busboy = new Busboy({ headers: req.headers })
-
-    busboy.on('file', (filename, file) => {
-      const saveTo = path.join(
-        process.cwd(),
-        '/',
-        FILE_DIR,
-        '/',
-        path.basename(filename)
-      )
-      file.pipe(fs.createWriteStream(saveTo))
-    })
-
-    busboy.on('finish', () => res.status(200))
-
-    return req.pipe(busboy)
-  } catch (e) {
-    error('saveFile:', e)
-    res.status(500).send({ status: 'unable_to_save_file', message: e.message })
-  }
 }
 
 async function getFiles(_: express.Request, res: express.Response) {
@@ -54,7 +30,7 @@ async function getFiles(_: express.Request, res: express.Response) {
 
 export async function getFile(req: express.Request, res: express.Response) {
   try {
-    const filename = req.params[0]
+    const filename = req.params.filename
 
     if (endsWith(filename, '.csv')) {
       const json = await csv().fromFile(`${FILE_DIR}/${filename}`)
@@ -74,12 +50,45 @@ export async function getFile(req: express.Request, res: express.Response) {
   }
 }
 
+async function saveFile(req: express.Request, res: express.Response) {
+  console.log(
+    '-------------------- file --> ',
+    'saveFile',
+    req.params,
+    req.param
+  )
+  try {
+    const busboy = new Busboy({ headers: req.headers })
+
+    busboy.on('file', (filename, file) => {
+      const saveTo = path.join(
+        process.cwd(),
+        '/',
+        FILE_DIR,
+        '/',
+        path.basename(filename)
+      )
+      file.pipe(fs.createWriteStream(saveTo))
+    })
+
+    busboy.on('finish', () => {
+      res.status(200)
+      res.end()
+    })
+
+    return req.pipe(busboy)
+  } catch (e) {
+    error('saveFile:', e)
+    res.status(500).send({ status: 'unable_to_save_file', message: e.message })
+  }
+}
+
 export default function() {
-  const app = express()
+  const router = express.Router()
 
-  app.get('/', getFiles)
-  app.get('/*', getFile)
-  app.post('*', saveFile)
+  router.get('/', getFiles)
+  router.get('/:filename', getFile)
+  router.post('/', saveFile)
 
-  return app
+  return router
 }

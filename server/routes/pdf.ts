@@ -12,7 +12,7 @@ async function renderPdf(req: express.Request, res: express.Response) {
     const path = req.params[0]
     const query = qs.stringify(req.query)
 
-    await page.goto(`${BASE_URL}/${path}?${query}`)
+    await page.goto(`${BASE_URL}${path}?${query}`)
 
     const buffer = await page.pdf({ format: 'A4' })
 
@@ -22,14 +22,14 @@ async function renderPdf(req: express.Request, res: express.Response) {
     browser.close()
   } catch (e) {
     error('routes/pdf', e)
-    res.status(500).send({ status: 'unknown_error', message: e.message })
+    res.status(500).send({ status: 'failed_to_render_pdf', message: e.message })
   }
 }
 
 export default function() {
-  const app = express()
+  const router = express.Router()
 
-  app.get('*', renderPdf)
+  router.get('*', renderPdf)
 
-  return app
+  return router
 }

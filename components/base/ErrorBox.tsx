@@ -13,7 +13,7 @@ export interface IErrorBoxProps extends ICardProps {
 const ErrorBox: SFC<IErrorBoxProps> = p => {
   return (
     <Card border={theme.bd.error} mb={4} boxShadow={0}>
-      {p.header && <TextH2>Error: {p.header}</TextH2>}
+      {p.header && <TextH2>{p.header}</TextH2>}
       {p.error && (
         <>
           {p.header ? (

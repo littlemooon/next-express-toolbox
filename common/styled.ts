@@ -1,4 +1,5 @@
 import * as Styled from '@emotion/styled'
+import { Ref } from 'react'
 import { ITheme } from './theme'
 
 export type Themed<P extends object> = Styled.WithTheme<P, ITheme>
@@ -25,6 +26,7 @@ export type StyledComponent<P extends object> = Styled.StyledComponent<
     className?: string
     style?: React.CSSProperties
     as?: string
+    ref?: Ref<any>
   },
   P,
   ITheme

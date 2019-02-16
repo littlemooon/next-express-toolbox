@@ -6,11 +6,14 @@ export enum DeviceType {
 
 export type TFileList = string[]
 
-export type TCsvFile = object[]
+export interface ICsvFile<T> {
+  headers: string[]
+  rows: T[]
+}
 
-export type TJsonFile = object
+export type TJsonFile<T> = T
 
-export type TFile = TCsvFile | TJsonFile
+export type TFile<T = any> = ICsvFile<T> | TJsonFile<T>
 
 export interface IAuthUser {
   id: string
@@ -24,26 +27,26 @@ export interface IAuthUser {
   }>
   provider: 'google'
   gender: string
-  _raw: '{\n "kind": "plus#person",\n "etag": "\\"jb1Xzanox6i8Zyse4DcYD8sZqy0/XiqOdqAvLPRMg4ABLF6yKkkfPvQ\\"",\n "gender": "male",\n "objectType": "person",\n "id": "110317121122295612260",\n "displayName": "Fred Wright",\n "name": {\n  "familyName": "Wright",\n  "givenName": "Fred"\n },\n "url": "https://plus.google.com/110317121122295612260",\n "image": {\n  "url": "https://lh4.googleusercontent.com/-aSwQDYgoKnI/AAAAAAAAAAI/AAAAAAAAAAA/ACevoQNULmyPoqhyY9N5ibhY5tBQzdUGgA/mo/photo.jpg?sz=50",\n  "isDefault": true\n },\n "isPlusUser": true,\n "language": "en_GB",\n "circledByCount": 0,\n "verified": false\n}\n'
+  _raw: string
   _json: {
-    kind: 'plus#person'
-    etag: '"jb1Xzanox6i8Zyse4DcYD8sZqy0/XiqOdqAvLPRMg4ABLF6yKkkfPvQ"'
-    gender: 'male'
-    objectType: 'person'
-    id: '110317121122295612260'
-    displayName: 'Fred Wright'
+    kind: string
+    etag: string
+    gender: string
+    objectType: string
+    id: string
+    displayName: string
     name: {
-      familyName: 'Wright'
-      givenName: 'Fred'
+      familyName: string
+      givenName: string
     }
-    url: 'https://plus.google.com/110317121122295612260'
+    url: string
     image: {
-      url: 'https://lh4.googleusercontent.com/-aSwQDYgoKnI/AAAAAAAAAAI/AAAAAAAAAAA/ACevoQNULmyPoqhyY9N5ibhY5tBQzdUGgA/mo/photo.jpg?sz=50'
-      isDefault: true
+      url: string
+      isDefault: boolean
     }
-    isPlusUser: true
-    language: 'en_GB'
-    circledByCount: 0
-    verified: false
+    isPlusUser: boolean
+    language: string
+    circledByCount: number
+    verified: boolean
   }
 }
