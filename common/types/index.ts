@@ -6,14 +6,11 @@ export enum DeviceType {
 
 export type TFileList = string[]
 
-export interface ICsvFile<T> {
-  headers: string[]
-  rows: T[]
-}
+export type TCsvFile<T extends object = {}> = T[]
 
-export type TJsonFile<T> = T
+export type TJsonFile<T extends object = {}> = T
 
-export type TFile<T = any> = ICsvFile<T> | TJsonFile<T>
+export type TFile<T extends object = {}> = TCsvFile<T> | TJsonFile<T>
 
 export interface IAuthUser {
   id: string

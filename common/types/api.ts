@@ -1,3 +1,24 @@
+export type Seconds = number
+
+export interface ITimesheetData {
+  activity: string
+  project: string
+  startDate: Date
+  endDate: Date
+  duration: Seconds
+}
+
+export interface ITimesheetDataRaw {
+  activity: string
+  project: string
+  workers: string
+  duration: string
+  time: string
+  duration_seconds: string
+  start_time: string
+  end_time: string
+}
+
 export interface IGithubData {
   id: number
   name: string

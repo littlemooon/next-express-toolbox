@@ -17,24 +17,19 @@ const Nav: SFC = () => {
   return (
     <nav>
       <Link href="/">
-        <Button>
-          <a>Home</a>
-        </Button>
+        <Button>Home</Button>
       </Link>
       <Link href="/user">
-        <Button>
-          <a>User</a>
-        </Button>
+        <Button>User</Button>
+      </Link>
+      <Link href="/chart">
+        <Button>Chart</Button>
       </Link>
       <Link href="/file">
-        <Button>
-          <a>File</a>
-        </Button>
+        <Button>File</Button>
       </Link>
       <Link href="/github">
-        <Button>
-          <a>Github</a>
-        </Button>
+        <Button>Github</Button>
       </Link>
 
       {serverState.token ? (

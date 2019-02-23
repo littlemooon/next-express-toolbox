@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useState } from 'react'
 import { FetchState, IFetchResponse } from '../common/Fetch'
-import { IGithubData } from '../common/types/github'
+import { IGithubData } from '../common/types/api'
 import { TFile, TFileList } from '../common/types/index'
 import { noop } from '../common/utils'
 

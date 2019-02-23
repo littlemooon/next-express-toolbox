@@ -1,7 +1,11 @@
 import Fetch from '../Fetch'
-import { IGithubData, IGithubDataRaw } from '../types/github'
+import { IGithubData, IGithubDataRaw } from '../types/api'
 
 export default class FetchGithub extends Fetch<IGithubData, { repo: string }> {
+  constructor(opts?: RequestInit) {
+    super(({ repo }) => `/github/repos/${repo}`, opts)
+  }
+
   public transformBody = async (res: Response): Promise<IGithubData> => {
     const json = (await res.json()) as IGithubDataRaw
     return {

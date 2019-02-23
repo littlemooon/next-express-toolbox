@@ -1,16 +1,21 @@
-import { ReactElement } from 'react'
+import { ReactElement, useMemo } from 'react'
 import theme from '../../common/theme'
 import Box from './Box'
 import Text from './Text'
 
 export interface ITableProps<T> {
-  headers: string[]
-  rows: T[]
+  data: T[]
 }
 
-const Table: <T>(
-  props: ITableProps<T>
-) => ReactElement<ITableProps<T>> = props => {
+const Table: <T>(props: ITableProps<T>) => ReactElement<ITableProps<T>> = p => {
+  const { headers, rows } = useMemo(
+    () => ({
+      headers: p.data ? Object.keys(p.data[0]) : [],
+      rows: p.data || [],
+    }),
+    [p.data]
+  )
+
   return (
     <Box
       as="table"
@@ -20,7 +25,7 @@ const Table: <T>(
     >
       <Box as="thead" bg={theme.brand}>
         <Box as="tr" border={theme.bd.primary}>
-          {props.headers.map(key => (
+          {headers.map(key => (
             <Text key={key} as="th" color={theme.white}>
               {key}
             </Text>
@@ -28,13 +33,13 @@ const Table: <T>(
         </Box>
       </Box>
       <Box as="tbody">
-        {props.rows.map((row: { [x: string]: any }) => (
+        {rows.map((row: { [x: string]: any }) => (
           <Box
             key={JSON.stringify(Object.values(row))}
             as="tr"
             border={theme.bd.primary}
           >
-            {props.headers.map(header => (
+            {headers.map(header => (
               <Text key={header} as="td">
                 {row[header]}
               </Text>
