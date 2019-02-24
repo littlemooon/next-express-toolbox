@@ -1,11 +1,16 @@
 export type Seconds = number
+export type Minutes = number
+export type Hours = number
+export type DateString = string | Date
 
 export interface ITimesheetData {
   activity: string
   project: string
-  startDate: Date
-  endDate: Date
-  duration: Seconds
+  startDate: DateString
+  endDate: DateString
+  durationSeconds: Seconds
+  durationMinutes: Minutes
+  durationHours: Hours
 }
 
 export interface ITimesheetDataRaw {

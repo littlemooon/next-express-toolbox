@@ -19,14 +19,12 @@ const blueGrey50 = '#ECEFF1'
 const blueGrey300 = '#90A4AE'
 const blueGrey700 = '#455A64'
 const grey900 = '#212121'
-
 // *
 // * Typography
 // *
 const sansSerif = "'Roboto', 'Helvetica Neue', Helvetica, sans-serif"
 const letterSpacing = 'normal'
-const fontSize = 8
-
+const fontSize = 12
 // *
 // * Layout
 // *
@@ -36,7 +34,6 @@ const baseProps = {
   height: 350,
   padding: 50,
 }
-
 // *
 // * Labels
 // *
@@ -50,10 +47,7 @@ const baseLabelStyles = {
   strokeWidth: 0,
 }
 
-const centeredLabelStyles = {
-  textAnchor: 'middle',
-  ...baseLabelStyles,
-}
+const centeredLabelStyles = { textAnchor: 'middle', ...baseLabelStyles }
 
 // *
 // * Strokes
@@ -62,11 +56,11 @@ const strokeDasharray = '10, 5'
 const strokeLinecap = 'round'
 const strokeLinejoin = 'round'
 
-const victoryTheme = {
+const t = {
   area: {
     style: {
       data: {
-        fill: deepOrange600,
+        fill: grey900,
       },
       labels: centeredLabelStyles,
     },
@@ -112,7 +106,7 @@ const victoryTheme = {
   bar: {
     style: {
       data: {
-        fill: deepOrange600,
+        fill: blueGrey700,
         padding,
         strokeWidth: 0,
       },
@@ -250,4 +244,4 @@ const victoryTheme = {
   },
 }
 
-export default victoryTheme
+export default t

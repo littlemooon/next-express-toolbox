@@ -20,7 +20,6 @@
     "no-submodule-imports": false,
     "no-implicit-dependencies": false,
     "jsx-no-multiline-js": false
-    "no-lam"
   },
   "rulesDirectory": [],
   "linterOptions": {
