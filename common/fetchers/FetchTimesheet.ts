@@ -1,7 +1,11 @@
 import * as df from 'date-fns'
 import * as R from 'ramda'
 import Fetch from '../Fetch'
-import { ITimesheetData, ITimesheetDataRaw } from '../types/api'
+import {
+  ITimesheetData,
+  ITimesheetDataRaw,
+  ITimesheetDataSerialized,
+} from '../types/api'
 
 export default class FetchTimesheet extends Fetch<
   ITimesheetData[],
@@ -31,5 +35,13 @@ export default class FetchTimesheet extends Fetch<
         }
       })
     )
+  }
+
+  public deserialize(data: ITimesheetDataSerialized[]): ITimesheetData[] {
+    return data.map(obj => ({
+      ...obj,
+      startDate: df.parse(obj.startDate),
+      endDate: df.parse(obj.endDate),
+    }))
   }
 }

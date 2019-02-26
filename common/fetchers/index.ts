@@ -7,10 +7,14 @@ export const logoutFetcher = new Fetch(() => '/auth/logout')
 
 export const fileListFetcher = new Fetch<TFileList, {}>(() => '/file')
 
-export const timesheetFetcher = new FetchTimesheet()
-
 export const fileFetcher = new Fetch<TFile<any>, { filename: string }>(
   ({ filename }) => `/file/${filename}`
 )
+
+export const timesheetListFetcher = new Fetch<TFileList, {}>(
+  () => '/file/timesheet'
+)
+
+export const timesheetFetcher = new FetchTimesheet()
 
 export const githubRepoFetcher = new FetchGithub()

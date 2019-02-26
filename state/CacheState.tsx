@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useState } from 'react'
 import { FetchState, IFetchResponse } from '../common/Fetch'
-import { IGithubData } from '../common/types/api'
+import { IGithubData, ITimesheetData } from '../common/types/api'
 import { TFile, TFileList } from '../common/types/index'
 import { noop } from '../common/utils'
 
@@ -8,6 +8,8 @@ export enum CacheKey {
   GITHUB_REPO = 'GITHUB_REPO',
   FILE_LIST = 'FILE_LIST',
   FILE = 'FILE',
+  TIMESHEET = 'TIMESHEET',
+  TIMESHEET_LIST = 'TIMESHEET_LIST',
 }
 
 export interface ICacheItem<T> {
@@ -23,6 +25,8 @@ export interface IAppCache {
   [CacheKey.GITHUB_REPO]?: IAppCacheItem<IGithubData>
   [CacheKey.FILE_LIST]?: IAppCacheItem<TFileList>
   [CacheKey.FILE]?: IAppCacheItem<TFile>
+  [CacheKey.TIMESHEET]?: IAppCacheItem<ITimesheetData>
+  [CacheKey.TIMESHEET_LIST]?: IAppCacheItem<TFileList>
 }
 
 export const CacheContext = createContext<{
@@ -39,12 +43,14 @@ export const CacheContext = createContext<{
   setItem: noop,
 })
 
-export function createCacheFromFetch<T>(
-  res: IFetchResponse<T>
+export function createCacheFromFetches<T>(
+  results: Array<IFetchResponse<T>>
 ): IAppCacheItem<T> {
-  return res.state === FetchState.SUCCESS && res.data
-    ? { [res.url]: { data: res.data, lastUpdate: new Date() } }
-    : {}
+  return results.reduce((acc, res) => {
+    return res.state === FetchState.SUCCESS && res.data
+      ? { ...acc, [res.url]: { data: res.data, lastUpdate: new Date() } }
+      : acc
+  }, {})
 }
 
 export function CacheProvider(props: {

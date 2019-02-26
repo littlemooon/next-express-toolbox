@@ -73,7 +73,7 @@ GithubPage.getInitialProps = async ({ query }) => {
   const result = await githubRepoFetcher.get({ repo })
   return {
     repo,
-    initialCache: new Map([[CacheKey.GITHUB_REPO, result]]),
+    initialCache: new Map([[CacheKey.GITHUB_REPO, [result]]]),
   }
 }
 

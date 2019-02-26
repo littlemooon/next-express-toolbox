@@ -35,7 +35,8 @@ export default function useFetch<T, P extends object = {}>(
 
   const cache = useCache<T>(cacheKey)
   const initialUrl = initialUrlParams ? fetcher.getUrl(initialUrlParams) : ''
-  const initialData = cache && cache.get(initialUrl)
+  const serializedData = cache && cache.get(initialUrl)
+  const initialData = serializedData && fetcher.deserialize(serializedData)
 
   const [fetchState, setFetchState] = useState<IFetchState<T>>({
     state: initialData ? FetchState.SUCCESS : FetchState.INITIAL,

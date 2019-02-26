@@ -107,4 +107,8 @@ export default class Fetch<T, P extends object = {}> {
       ...opts,
     })
   }
+
+  public deserialize(obj: any): T {
+    return obj
+  }
 }

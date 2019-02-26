@@ -7,7 +7,7 @@ import theme from '../common/theme'
 import {
   CacheKey,
   CacheProvider,
-  createCacheFromFetch,
+  createCacheFromFetches,
   IAppCache,
 } from '../state/CacheState'
 import ServerProvider, {
@@ -31,11 +31,11 @@ export default class AppPage extends App<IAppPageProps> {
       initialCache = new Map(),
       ...pageProps
     }: {
-      initialCache?: Map<CacheKey, IFetchResponse<any>>
+      initialCache?: Map<CacheKey, [IFetchResponse<any>]>
     } = Component.getInitialProps ? await Component.getInitialProps(ctx) : {}
 
     const cache = Array.from(initialCache.entries()).reduce(
-      (acc, [key, value]) => ({ ...acc, [key]: createCacheFromFetch(value) }),
+      (acc, [key, value]) => ({ ...acc, [key]: createCacheFromFetches(value) }),
       {}
     )
 

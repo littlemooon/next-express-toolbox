@@ -1,13 +1,22 @@
 export type Seconds = number
 export type Minutes = number
 export type Hours = number
-export type DateString = string | Date
 
 export interface ITimesheetData {
   activity: string
   project: string
-  startDate: DateString
-  endDate: DateString
+  startDate: Date
+  endDate: Date
+  durationSeconds: Seconds
+  durationMinutes: Minutes
+  durationHours: Hours
+}
+
+export interface ITimesheetDataSerialized {
+  activity: string
+  project: string
+  startDate: string
+  endDate: string
   durationSeconds: Seconds
   durationMinutes: Minutes
   durationHours: Hours
