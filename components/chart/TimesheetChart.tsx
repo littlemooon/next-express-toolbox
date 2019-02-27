@@ -1,5 +1,5 @@
 import * as df from 'date-fns'
-import { SFC } from 'react'
+import { SFC, useEffect } from 'react'
 import { FetchState } from '../../common/Fetch'
 import { timesheetFetcher } from '../../common/fetchers/index'
 import useFetch from '../../common/hooks/useFetch'
@@ -15,6 +15,10 @@ const TimesheetChart: SFC<{ filename: string }> = props => {
       filename: props.filename,
     },
   })
+
+  useEffect(() => {
+    fetch.get({ filename: props.filename })
+  }, [props.filename])
 
   const data = fetch.data
 
