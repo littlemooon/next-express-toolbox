@@ -51,12 +51,6 @@ export async function getFile(req: express.Request, res: express.Response) {
 }
 
 async function saveFile(req: express.Request, res: express.Response) {
-  console.log(
-    '-------------------- file --> ',
-    'saveFile',
-    req.params,
-    req.param
-  )
   try {
     const busboy = new Busboy({ headers: req.headers })
 

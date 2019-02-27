@@ -16,6 +16,9 @@ const Nav: SFC = () => {
       <Link href="/chart">
         <Button>Chart</Button>
       </Link>
+      <Link href="/drive">
+        <Button>Drive</Button>
+      </Link>
       <Link href="/file">
         <Button>File</Button>
       </Link>

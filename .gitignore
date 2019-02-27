@@ -4,3 +4,4 @@ yarn.lock
 tmp/
 .env
 .env.server
+token.json

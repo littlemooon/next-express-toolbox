@@ -17,4 +17,10 @@ export const timesheetListFetcher = new Fetch<TFileList, {}>(
 
 export const timesheetFetcher = new FetchTimesheet()
 
+export const driveListFetcher = new Fetch<TFileList, {}>(() => '/drive')
+
+export const driveFetcher = new Fetch<TFile<any>, { fileId: string }>(
+  ({ fileId }) => `/drive/${fileId}`
+)
+
 export const githubRepoFetcher = new FetchGithub()

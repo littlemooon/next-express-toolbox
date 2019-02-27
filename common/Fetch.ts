@@ -1,6 +1,7 @@
 import to from 'await-to-js'
 import fetch from 'isomorphic-unfetch'
 import { BASE_URL } from './constants'
+import { error } from './log'
 import { startsWith } from './string'
 
 export enum FetchState {
@@ -61,31 +62,35 @@ export default class Fetch<T, P extends object = {}> {
 
     try {
       const [err, res] = await to(fetch(url, fetchOpts))
+      const isGet = fetchOpts.method === 'GET'
 
       if (res && res.ok) {
-        if (fetchOpts.method === 'GET') {
-          const data = await this.transformBody(res)
-          return this.saveResponse({
-            url,
-            state: FetchState.SUCCESS,
-            data,
-          })
-        } else {
-          return {
-            url,
-            state: FetchState.SUCCESS,
-          }
-        }
-      } else {
+        const data = isGet ? await this.transformBody(res) : undefined
+
+        return this.saveResponse({
+          url,
+          state: FetchState.SUCCESS,
+          data,
+        })
+      } else if (err) {
+        error(`API fetch error: ${url}`, err)
         return this.saveResponse({
           url,
           state: FetchState.ERROR,
-          error: new Error(
-            err || (res ? res.statusText : `Unknown error fetching: ${url}`)
-          ),
+          error: err,
+        })
+      } else {
+        const data = res ? await res.json() : {}
+        const serverError = new Error(data.message || 'Unknown error')
+        error(`API server error: ${url}`, serverError)
+        return this.saveResponse({
+          url,
+          state: FetchState.ERROR,
+          error: serverError,
         })
       }
     } catch (e) {
+      error(`API call error: ${url}`, e)
       return this.saveResponse({
         url,
         state: FetchState.ERROR,

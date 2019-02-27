@@ -8,6 +8,8 @@ export enum CacheKey {
   GITHUB_REPO = 'GITHUB_REPO',
   FILE_LIST = 'FILE_LIST',
   FILE = 'FILE',
+  DRIVE = 'DRIVE',
+  DRIVE_LIST = 'DRIVE_LIST',
   TIMESHEET = 'TIMESHEET',
   TIMESHEET_LIST = 'TIMESHEET_LIST',
 }
@@ -25,8 +27,10 @@ export interface IAppCache {
   [CacheKey.GITHUB_REPO]?: IAppCacheItem<IGithubData>
   [CacheKey.FILE_LIST]?: IAppCacheItem<TFileList>
   [CacheKey.FILE]?: IAppCacheItem<TFile>
-  [CacheKey.TIMESHEET]?: IAppCacheItem<ITimesheetData>
   [CacheKey.TIMESHEET_LIST]?: IAppCacheItem<TFileList>
+  [CacheKey.TIMESHEET]?: IAppCacheItem<ITimesheetData>
+  [CacheKey.DRIVE_LIST]?: IAppCacheItem<TFileList>
+  [CacheKey.DRIVE]?: IAppCacheItem<TFile>
 }
 
 export const CacheContext = createContext<{

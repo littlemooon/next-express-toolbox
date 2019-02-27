@@ -5,7 +5,7 @@ export function log(...args: any[]) {
   console.log(chalk.blue(...args))
 }
 
-export function error(id: string, err: Error) {
+export function error(id: string, err: Error = new Error('Unknown error')) {
   // tslint:disable-next-line:no-console
   console.error(chalk.red(err.name), chalk.yellow(id), err.message)
   // tslint:disable-next-line:no-console

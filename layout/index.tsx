@@ -2,9 +2,9 @@ import { NextFC } from 'next'
 import Head from 'next/head'
 import { ReactNode, useContext } from 'react'
 import { APP_NAME } from '../common/constants'
-import AuthRequired from '../components/AuthRequired'
 import Box from '../components/base/Box'
 import Flex from '../components/base/Flex'
+import LoginForm from '../components/LoginForm'
 import { ServerContext } from '../state/ServerState'
 import Container from './Container'
 import Footer from './Footer'
@@ -33,7 +33,7 @@ const Layout: NextFC<ILayoutProps> = ({
       <Box width={1}>
         <Header />
         <Container as="main" py={[3, 4, 5]}>
-          {requireAuth && !serverState.token ? <AuthRequired /> : children}
+          {requireAuth && !serverState.token ? <LoginForm /> : children}
         </Container>
       </Box>
       <Footer />

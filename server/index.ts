@@ -2,52 +2,57 @@ import * as cookieParser from 'cookie-parser'
 import * as express from 'express'
 import * as morgan from 'morgan'
 import * as next from 'next'
+import * as passport from 'passport'
 import { DEV, PORT } from '../common/constants'
 import { error, log } from '../common/log'
 import { startsWith } from '../common/string'
 import env from './env'
 import api from './routes/api'
 import auth from './routes/auth'
+import drive from './routes/drive'
 import file from './routes/file'
 import pdf from './routes/pdf'
 
 // tslint:disable-next-line:no-var-requires
-const cookieSession = require('cookie-session')
+const session = require('cookie-session')
 
-env()
+const nextApp = next({ dev: DEV })
+const handle = nextApp.getRequestHandler()
 
-const app = next({ dev: DEV })
-const handle = app.getRequestHandler()
-
-app
+nextApp
   .prepare()
   .then(() => {
-    const server = express()
+    const app = express()
 
-    server.use(
-      cookieSession({
-        keys: [process.env.COOKIE_SESSION_KEY],
-      })
-    )
-    server.use(cookieParser())
-
-    server.use(
+    app.use(
       morgan('dev', {
         skip: req => startsWith(req.path, '/_next'),
       })
     )
 
-    server.use('/api/auth', auth())
+    app.use(
+      session({
+        keys: [env.COOKIE_SESSION_KEY],
+      })
+    )
+    app.use(cookieParser())
 
-    server.use('/api/pdf', pdf())
+    app.use(passport.initialize())
+    app.use(passport.session())
 
-    server.use('/api/file', file())
+    app.use('/api/auth', auth())
 
-    server.use('/api', api())
+    app.use('/api/pdf', pdf())
 
-    server.get('*', (req, res) => handle(req, res))
+    app.use('/api/file', file())
 
-    server.listen(PORT, (err: Error) => {
+    app.use('/api/drive', drive())
+
+    app.use('/api', api())
+
+    app.get('*', (req, res) => handle(req, res))
+
+    app.listen(PORT, (err: Error) => {
       if (err) {
         throw err
       }

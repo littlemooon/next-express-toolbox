@@ -1,5 +1,4 @@
 import { css, Global } from '@emotion/core'
-import d from 'dot-prop'
 import { ThemeProvider } from 'emotion-theming'
 import App, { Container, DefaultAppIProps, NextAppContext } from 'next/app'
 import { IFetchResponse } from '../common/Fetch'
@@ -11,6 +10,7 @@ import {
   IAppCache,
 } from '../state/CacheState'
 import ServerProvider, {
+  getServerState,
   IServerState,
   ServerContext,
 } from '../state/ServerState'
@@ -18,6 +18,11 @@ import ServerProvider, {
 interface IAppPageProps {
   serverState: Partial<IServerState>
   cache: IAppCache
+}
+
+interface IInitialProps {
+  [x: string]: any
+  initialCache?: Map<CacheKey, Array<IFetchResponse<any>>>
 }
 
 export default class AppPage extends App<IAppPageProps> {
@@ -30,9 +35,9 @@ export default class AppPage extends App<IAppPageProps> {
     const {
       initialCache = new Map(),
       ...pageProps
-    }: {
-      initialCache?: Map<CacheKey, [IFetchResponse<any>]>
-    } = Component.getInitialProps ? await Component.getInitialProps(ctx) : {}
+    }: IInitialProps = Component.getInitialProps
+      ? await Component.getInitialProps(ctx)
+      : {}
 
     const cache = Array.from(initialCache.entries()).reduce(
       (acc, [key, value]) => ({ ...acc, [key]: createCacheFromFetches(value) }),
@@ -40,11 +45,7 @@ export default class AppPage extends App<IAppPageProps> {
     )
 
     return {
-      serverState: {
-        user: d.get(ctx, 'req.session.passport.user.profile'),
-        token: d.get(ctx, 'req.session.token'),
-        isServerRendered: typeof window === 'undefined',
-      },
+      serverState: getServerState(ctx),
       cache,
       pageProps,
     }

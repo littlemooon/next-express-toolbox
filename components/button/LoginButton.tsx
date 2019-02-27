@@ -11,16 +11,12 @@ const onLogout = () => {
   logoutFetcher.get({})
 }
 
-const LoginButton: SFC<IButtonProps & WithRouterProps> = ({
-  router,
-  ...props
-}) => {
+const LoginButton: SFC<
+  IButtonProps & WithRouterProps & { redirect?: string }
+> = ({ router, redirect, ...props }) => {
   const serverState = useContext(ServerContext)
   const pathname = router && router.pathname
-  console.log(
-    '-------------------- LoginButton --> ',
-    `/api/auth/google${pathname ? `?redirect=${pathname}` : ''}`
-  )
+
   return serverState.token ? (
     <Link href="/">
       <Button onClick={onLogout} {...props}>
@@ -28,7 +24,11 @@ const LoginButton: SFC<IButtonProps & WithRouterProps> = ({
       </Button>
     </Link>
   ) : (
-    <Link href={`/api/auth/google${pathname ? `?redirect=${pathname}` : ''}`}>
+    <Link
+      href={`/api/auth/google${
+        pathname ? `?redirect=${redirect || pathname}` : ''
+      }`}
+    >
       <Button {...props}>Login</Button>
     </Link>
   )
