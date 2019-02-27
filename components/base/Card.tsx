@@ -26,7 +26,6 @@ Card.defaultProps = {
   boxShadow: theme.bs[1],
   borderRadius: 4,
   p: 3,
-  mb: 3,
 }
 
 export default Card

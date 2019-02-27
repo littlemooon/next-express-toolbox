@@ -2,13 +2,15 @@ import styled from '@emotion/styled'
 import { HTMLAttributes } from 'react'
 import * as SS from 'styled-system'
 import { StyledComponent } from '../../common/styled'
+import { Omit } from '../../common/types/index'
 import Text, { ITextProps } from './Text'
 
-export interface IButtonProps extends ITextProps, SS.ButtonStyleProps {}
+export interface IButtonProps
+  extends ITextProps,
+    SS.ButtonStyleProps,
+    Omit<Omit<HTMLAttributes<HTMLButtonElement>, 'color'>, 'css'> {}
 
-const Button: StyledComponent<
-  IButtonProps & HTMLAttributes<HTMLButtonElement>
-> = styled(Text)(
+const Button: StyledComponent<IButtonProps> = styled(Text)(
   {
     appearance: 'none',
     display: 'inline-block',

@@ -119,7 +119,7 @@ function DateChart<T extends object>(
   }, [filledData])
 
   return (
-    <VictoryChart domainPadding={20} theme={victoryTheme} width={400}>
+    <VictoryChart domainPadding={20} theme={victoryTheme}>
       <VictoryAxis {...xAxis} />
       <VictoryAxis dependentAxis={true} {...yAxis} />
       <VictoryBar

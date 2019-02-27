@@ -1,7 +1,13 @@
 {
   "version": 2,
   "name": "next-express-toolbox",
-  "builds": [
-    { "src": "server/index.ts", "use": "@now/node-server" }
-  ]
+  "builds": [{
+      "src": "server/index.ts",
+      "use": "@now/node-server@canary"
+    }
+
+  ],
+  "env": {
+    "IS_NOW": "true"
+  }
 }

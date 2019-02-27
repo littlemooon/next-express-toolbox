@@ -1,5 +1,7 @@
 import { NextFC } from 'next'
 import { timesheetFetcher } from '../common/fetchers/index'
+import Card from '../components/base/Card'
+import Grid from '../components/base/Grid'
 import TimesheetChart from '../components/chart/TimesheetChart'
 import Layout from '../layout'
 import { CacheKey } from '../state/CacheState'
@@ -11,10 +13,18 @@ const files = [
 
 const ChartPage: NextFC = () => {
   return (
-    <Layout>
-      {files.map(filename => (
-        <TimesheetChart key={filename} filename={filename} />
-      ))}
+    <Layout requireAuth={true}>
+      <Grid
+        gridTemplateColumns={['1fr 1fr', '1fr', '1fr 1fr 1fr']}
+        gridColumnGap={4}
+        gridRowGap={4}
+      >
+        {[...files, ...files, ...files, ...files].map(filename => (
+          <Card key={filename}>
+            <TimesheetChart filename={filename} />
+          </Card>
+        ))}
+      </Grid>
     </Layout>
   )
 }

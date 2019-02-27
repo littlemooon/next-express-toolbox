@@ -5,7 +5,6 @@ import { timesheetFetcher } from '../../common/fetchers/index'
 import useFetch from '../../common/hooks/useFetch'
 import { ITimesheetData } from '../../common/types/api'
 import { CacheKey } from '../../state/CacheState'
-import Card from '../base/Card'
 import ErrorBox from '../base/ErrorBox'
 import Spinner from '../base/Spinner'
 import DateChart from './DateChart'
@@ -32,7 +31,7 @@ const TimesheetChart: SFC<{ filename: string }> = props => {
   })
 
   return (
-    <Card minHeight={400}>
+    <>
       {fetch.state === FetchState.SUCCESS ? (
         <DateChart
           data={data}
@@ -47,7 +46,7 @@ const TimesheetChart: SFC<{ filename: string }> = props => {
       ) : (
         <Spinner />
       )}
-    </Card>
+    </>
   )
 }
 

@@ -37,6 +37,10 @@ export default function() {
 
   app.get(
     '/google',
+    (req, _, next) => {
+      req.session = { ...req.session, redirect: req.query.redirect }
+      next()
+    },
     passport.authenticate('google', {
       scope: ['https://www.googleapis.com/auth/userinfo.profile'],
     })
@@ -48,9 +52,8 @@ export default function() {
       failureRedirect: '/',
     }),
     (req, res) => {
-      req.session = req.session || {}
-      req.session.token = req.user.token
-      res.redirect('/')
+      req.session = { ...req.session, token: req.user.token }
+      res.redirect(req.session.redirect || '/')
     }
   )
 

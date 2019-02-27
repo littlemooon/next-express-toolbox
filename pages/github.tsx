@@ -37,7 +37,7 @@ const GithubPage: NextFC<IGithubProps> = props => {
   const onRefresh = () => fetch.get({ repo: debouncedRepo }, { force: true })
 
   return (
-    <Layout>
+    <Layout requireAuth={true}>
       <div>
         <Card mb={3}>
           <Input value={repo} onChange={onChange} />

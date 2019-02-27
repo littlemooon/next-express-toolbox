@@ -1,24 +1,10 @@
 // *
 // * Colors
 // *
-const yellow200 = '#FFF59D'
-const deepOrange600 = '#F4511E'
-const lime300 = '#DCE775'
-const lightGreen500 = '#8BC34A'
-const teal700 = '#00796B'
-const cyan900 = '#006064'
-const colors = [
-  deepOrange600,
-  yellow200,
-  lime300,
-  lightGreen500,
-  teal700,
-  cyan900,
-]
-const blueGrey50 = '#ECEFF1'
-const blueGrey300 = '#90A4AE'
-const blueGrey700 = '#455A64'
-const grey900 = '#212121'
+import { colors } from './theme'
+
+const gridColor = colors.greyDark
+const textColor = colors.green
 
 // *
 // * Typography
@@ -34,7 +20,7 @@ const padding = 8
 const baseProps = {
   width: 350,
   height: 350,
-  padding: 50,
+  padding: 30,
 }
 
 // *
@@ -45,7 +31,7 @@ const baseLabelStyles = {
   fontSize,
   letterSpacing,
   padding,
-  fill: blueGrey700,
+  fill: textColor,
   stroke: 'transparent',
   strokeWidth: 0,
 }
@@ -66,7 +52,7 @@ const victoryTheme = {
   area: {
     style: {
       data: {
-        fill: deepOrange600,
+        fill: colors.redLight,
       },
       labels: centeredLabelStyles,
     },
@@ -76,7 +62,7 @@ const victoryTheme = {
     style: {
       axis: {
         fill: 'transparent',
-        stroke: blueGrey300,
+        stroke: gridColor,
         strokeWidth: 2,
         strokeLinecap,
         strokeLinejoin,
@@ -88,7 +74,7 @@ const victoryTheme = {
       },
       grid: {
         fill: 'none',
-        stroke: blueGrey50,
+        stroke: gridColor,
         strokeDasharray,
         strokeLinecap,
         strokeLinejoin,
@@ -97,14 +83,14 @@ const victoryTheme = {
       ticks: {
         fill: 'transparent',
         size: 5,
-        stroke: blueGrey300,
+        stroke: gridColor,
         strokeWidth: 1,
         strokeLinecap,
         strokeLinejoin,
       },
       tickLabels: {
         ...baseLabelStyles,
-        fill: blueGrey700,
+        fill: textColor,
       },
     },
     ...baseProps,
@@ -112,7 +98,7 @@ const victoryTheme = {
   bar: {
     style: {
       data: {
-        fill: deepOrange600,
+        fill: colors.redLight,
         padding,
         strokeWidth: 0,
       },
@@ -122,15 +108,15 @@ const victoryTheme = {
   },
   boxplot: {
     style: {
-      max: { padding, stroke: blueGrey700, strokeWidth: 1 },
+      max: { padding, stroke: colors.grey, strokeWidth: 1 },
       maxLabels: baseLabelStyles,
-      median: { padding, stroke: blueGrey700, strokeWidth: 1 },
+      median: { padding, stroke: colors.grey, strokeWidth: 1 },
       medianLabels: baseLabelStyles,
-      min: { padding, stroke: blueGrey700, strokeWidth: 1 },
+      min: { padding, stroke: colors.grey, strokeWidth: 1 },
       minLabels: baseLabelStyles,
-      q1: { padding, fill: blueGrey700 },
+      q1: { padding, fill: colors.grey },
       q1Labels: baseLabelStyles,
-      q3: { padding, fill: blueGrey700 },
+      q3: { padding, fill: colors.grey },
       q3Labels: baseLabelStyles,
     },
     boxWidth: 20,
@@ -139,13 +125,13 @@ const victoryTheme = {
   candlestick: {
     style: {
       data: {
-        stroke: blueGrey700,
+        stroke: colors.grey,
       },
       labels: centeredLabelStyles,
     },
     candleColors: {
       positive: '#ffffff',
-      negative: blueGrey700,
+      negative: colors.grey,
     },
     ...baseProps,
   },
@@ -156,7 +142,7 @@ const victoryTheme = {
       data: {
         fill: 'transparent',
         opacity: 1,
-        stroke: blueGrey700,
+        stroke: colors.grey,
         strokeWidth: 2,
       },
       labels: centeredLabelStyles,
@@ -185,7 +171,7 @@ const victoryTheme = {
       data: {
         fill: 'transparent',
         opacity: 1,
-        stroke: blueGrey700,
+        stroke: colors.grey,
         strokeWidth: 2,
       },
       labels: centeredLabelStyles,
@@ -197,7 +183,7 @@ const victoryTheme = {
     style: {
       data: {
         padding,
-        stroke: blueGrey50,
+        stroke: colors.greyLight,
         strokeWidth: 1,
       },
       labels: { ...baseLabelStyles, padding: 20 },
@@ -207,7 +193,7 @@ const victoryTheme = {
   scatter: {
     style: {
       data: {
-        fill: blueGrey700,
+        fill: colors.grey,
         opacity: 1,
         stroke: 'transparent',
         strokeWidth: 0,
@@ -223,7 +209,7 @@ const victoryTheme = {
   tooltip: {
     style: { ...centeredLabelStyles, padding: 5, pointerEvents: 'none' },
     flyoutStyle: {
-      stroke: grey900,
+      stroke: colors.greyDark,
       strokeWidth: 1,
       fill: '#f0f0f0',
       pointerEvents: 'none',
@@ -240,7 +226,7 @@ const victoryTheme = {
       },
       labels: { ...centeredLabelStyles, padding: 5, pointerEvents: 'none' },
       flyout: {
-        stroke: grey900,
+        stroke: colors.greyDark,
         strokeWidth: 1,
         fill: '#f0f0f0',
         pointerEvents: 'none',

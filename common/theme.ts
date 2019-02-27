@@ -16,7 +16,7 @@ interface IColors {
   white: string
 }
 
-const colors: IColors = {
+export const colors: IColors = {
   black: '#18212e',
   blue: '#449bf7',
   blueDark: '#084a96',
@@ -101,6 +101,7 @@ export interface ITheme {
   space: number[]
   fontSizes: number[]
   breakpoints: string[]
+  fontFamily: string
 }
 
 const breakpoints = {
@@ -190,6 +191,7 @@ const theme: ITheme = {
   //          0   1   2   3   4   5   6   7   8
   fontSizes: [12, 14, 16, 20, 24, 32, 48, 64, 72],
   breakpoints: Object.values(breakpoints),
+  fontFamily: "'Roboto', 'Helvetica Neue', Helvetica, sans-serif",
 }
 
 export default theme

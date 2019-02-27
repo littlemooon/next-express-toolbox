@@ -16,7 +16,7 @@ const FilePage: NextFC = () => {
   const onSelect = useCallback((f: string) => setFilename(f), [])
 
   return (
-    <Layout>
+    <Layout requireAuth={true}>
       <Card>
         <FileUpload />
       </Card>
