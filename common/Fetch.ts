@@ -66,7 +66,6 @@ export default class Fetch<T, P extends object = {}> {
 
       if (res && res.ok) {
         const data = isGet ? await this.transformBody(res) : undefined
-
         return this.saveResponse({
           url,
           state: FetchState.SUCCESS,
@@ -90,7 +89,6 @@ export default class Fetch<T, P extends object = {}> {
             error: serverError,
           })
         } catch (parseError) {
-          log.info(res)
           log.error(`API parse error: ${url}`, parseError)
           return this.saveResponse({
             url,

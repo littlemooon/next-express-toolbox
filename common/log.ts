@@ -1,9 +1,15 @@
 import chalk from 'chalk'
+import { isServer } from './globals'
 
 export default {
   info(...args: any[]) {
-    // tslint:disable-next-line:no-console
-    console.log(chalk.blue(...args))
+    if (typeof args[0] === 'object' && isServer) {
+      // tslint:disable-next-line:no-console
+      console.log(chalk.blue(require('util').inspect(args[0], false, null)))
+    } else {
+      // tslint:disable-next-line:no-console
+      console.log(chalk.blue(...args))
+    }
   },
   error(id: string, err: Error = new Error('Unknown error')) {
     // tslint:disable-next-line:no-console

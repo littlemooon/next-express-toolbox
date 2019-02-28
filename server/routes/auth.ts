@@ -1,8 +1,9 @@
 import * as express from 'express'
 import { google } from 'googleapis'
 import log from '../../common/log'
-import { IAuthUser } from '../../common/types/index'
 import env from '../env'
+import { setupDrive } from '../utils/drive-utils'
+import { clearSession, getSession, setSession } from '../utils/session-utils'
 
 const SCOPES = [
   'https://www.googleapis.com/auth/plus.me',
@@ -18,7 +19,7 @@ const oauthClient = new google.auth.OAuth2(
 )
 
 export const getAuthClient = (req: express.Request) => {
-  const tokens = req.session && req.session.tokens
+  const tokens = getSession(req).tokens
   if (tokens) {
     oauthClient.setCredentials(tokens)
   } else {
@@ -31,7 +32,7 @@ export default function() {
   const router = express.Router()
 
   router.get('/google', (req, res) => {
-    req.session = { ...req.session, redirect: req.query.redirect }
+    setSession(req, { redirect: req.query.redirect })
 
     const url = oauthClient.generateAuthUrl({
       access_type: 'offline',
@@ -48,26 +49,27 @@ export default function() {
 
       const data = await oauthClient.getToken(code)
       const tokens = data.tokens
-      req.session = { ...req.session, tokens }
+      setSession(req, { tokens })
 
       const plus = google.plus({ version: 'v1', auth: getAuthClient(req) })
       const me = await plus.people.get({ userId: 'me' })
 
       const { emails, id, displayName, image, language } = me.data
-      const user: IAuthUser = {
-        id,
-        email: (emails && emails.length && emails[0].value) || '',
-        name: displayName,
-        image: image && image.url,
-        language,
-        token: tokens.access_token || undefined,
-      }
 
-      req.session = { ...req.session, user }
-      log.info({ data, me })
-      log.info(req.session)
+      const session = setSession(req, {
+        user: {
+          id,
+          email: (emails && emails.length && emails[0].value) || '',
+          name: displayName,
+          image: image && image.url,
+          language,
+          token: tokens.access_token || undefined,
+        },
+      })
 
-      res.redirect(req.session.redirect || '/')
+      setupDrive(req)
+
+      res.redirect(session.redirect || '/')
     } catch (e) {
       log.error('/google/callback:', e)
       res.status(500).send({ status: 'unable_to_login', message: e.message })
@@ -75,7 +77,7 @@ export default function() {
   })
 
   router.get('/logout', (req, res) => {
-    req.session = undefined
+    clearSession(req)
     res.redirect('/')
   })
 
