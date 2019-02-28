@@ -1,3 +1,6 @@
+import { Credentials } from 'google-auth-library'
+import { DATA_FOLDER } from '../constants'
+
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 
 export enum DeviceType {
@@ -29,4 +32,16 @@ export interface IAuthUser {
   image?: string
   language?: string
   token?: string
+}
+
+export interface IDriveFolders {
+  [DATA_FOLDER]?: string
+  timesheet?: string
+}
+
+export interface ISession {
+  user?: IAuthUser
+  redirect?: string
+  tokens?: Credentials
+  folders: IDriveFolders
 }

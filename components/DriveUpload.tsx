@@ -1,8 +1,9 @@
 import { SFC, useRef } from 'react'
 import { FetchState } from '../common/Fetch'
-import { timesheetListFetcher } from '../common/fetchers/index'
+import { driveListFetcher } from '../common/fetchers/index'
 import useFetch from '../common/hooks/useFetch'
 import theme from '../common/theme'
+import { IDriveFolders } from '../common/types'
 import { CacheKey } from '../state/CacheState'
 import Button from './base/Button'
 import Card from './base/Card'
@@ -15,6 +16,7 @@ import Text from './base/Text'
 export interface IDriveUploadProps {
   type?: 'text/csv'
   multiple?: boolean
+  folder?: keyof IDriveFolders
 }
 
 function getFormData(files: FileList) {
@@ -30,18 +32,18 @@ function getFormData(files: FileList) {
   return formData
 }
 
-const DriveUpload: SFC<IDriveUploadProps> = props => {
+const DriveUpload: SFC<IDriveUploadProps> = p => {
   const ref = useRef<HTMLInputElement | undefined>(undefined)
-  const fetch = useFetch(CacheKey.TIMESHEET_LIST, timesheetListFetcher)
+  const fetch = useFetch(CacheKey.DRIVE_LIST, driveListFetcher)
 
   const onUpload = async () => {
     if (ref.current) {
       const files = ref.current.files
       if (files && files.length) {
-        await fetch.post({}, { body: getFormData(files) })
+        await fetch.post({ folder: p.folder }, { body: getFormData(files) })
         ref.current.files = null
         ref.current.value = ''
-        await fetch.get({})
+        await fetch.get({ folder: p.folder })
       }
     }
   }
@@ -56,8 +58,8 @@ const DriveUpload: SFC<IDriveUploadProps> = props => {
           )}
           <Input
             type="file"
-            accept={props.type}
-            multiple={props.multiple}
+            accept={p.type}
+            multiple={p.multiple}
             ref={ref}
             mb={2}
           />

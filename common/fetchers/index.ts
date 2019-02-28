@@ -10,12 +10,11 @@ export const fileFetcher = new Fetch<TFile<any>, { filename: string }>(
   ({ filename }) => `/file/${filename}`
 )
 
-export const timesheetListFetcher = new Fetch<IDriveList, {}>(
-  () => '/drive/timesheet'
-)
 export const timesheetFetcher = new FetchTimesheet()
 
-export const driveListFetcher = new Fetch<IDriveList, {}>(() => '/drive')
+export const driveListFetcher = new Fetch<IDriveList, { folder?: string }>(
+  ({ folder }) => ['/drive', folder].join('/')
+)
 export const driveFetcher = new Fetch<TFile<any>, { fileId: string }>(
   ({ fileId }) => `/drive/file/${fileId}`
 )

@@ -1,19 +1,5 @@
 import * as express from 'express'
-import { Credentials } from 'google-auth-library'
-import { DATA_FOLDER } from '../../common/constants'
-import { IAuthUser } from '../../common/types/index'
-
-export interface ISessionFolders {
-  [DATA_FOLDER]?: string
-  timesheet?: string
-}
-
-export interface ISession {
-  user?: IAuthUser
-  redirect?: string
-  tokens?: Credentials
-  folders: ISessionFolders
-}
+import { IDriveFolders, ISession } from '../../common/types/index'
 
 export function getSession(req: express.Request) {
   req.session = { folders: {}, ...req.session }
@@ -27,7 +13,7 @@ export function setSession(req: express.Request, session: Partial<ISession>) {
 
 export function setSessionFolder(
   req: express.Request,
-  folders: Partial<ISessionFolders>
+  folders: Partial<IDriveFolders>
 ) {
   return setSession(req, {
     folders: { ...(req.session ? req.session.folders : undefined), ...folders },

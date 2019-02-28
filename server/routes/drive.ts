@@ -2,13 +2,14 @@ import * as Busboy from 'busboy'
 import * as express from 'express'
 import { DATA_FOLDER } from '../../common/constants'
 import log from '../../common/log'
+import { IDriveFolders } from '../../common/types/index'
 import { getDrive } from '../utils/drive-utils'
-import { getSession, ISessionFolders } from '../utils/session-utils'
+import { getSession } from '../utils/session-utils'
 
 async function getDriveList(
   req: express.Request,
   res: express.Response,
-  folder: keyof ISessionFolders = DATA_FOLDER
+  folder: keyof IDriveFolders = DATA_FOLDER
 ) {
   try {
     const folders = getSession(req).folders
@@ -28,7 +29,7 @@ async function getDriveList(
 async function createDriveFile(
   req: express.Request,
   res: express.Response,
-  folder: keyof ISessionFolders = DATA_FOLDER
+  folder: keyof IDriveFolders = DATA_FOLDER
 ) {
   try {
     const busboy = new Busboy({ headers: req.headers })
@@ -66,11 +67,7 @@ async function createDriveFile(
 export default function() {
   const router = express.Router()
 
-  router.get('/', async (req, res) => {
-    return getDriveList(req, res)
-  })
-
-  router.get('/:folder', async (req, res) => {
+  router.get('/:folder?', async (req, res) => {
     return getDriveList(req, res, req.params.folder)
   })
 
@@ -87,11 +84,7 @@ export default function() {
     }
   })
 
-  router.post('/', (req, res) => {
-    return createDriveFile(req, res)
-  })
-
-  router.post('/:folder', (req, res) => {
+  router.post('/:folder?', (req, res) => {
     return createDriveFile(req, res, req.params.folder)
   })
 

@@ -11,7 +11,6 @@ export enum CacheKey {
   DRIVE = 'DRIVE',
   DRIVE_LIST = 'DRIVE_LIST',
   TIMESHEET = 'TIMESHEET',
-  TIMESHEET_LIST = 'TIMESHEET_LIST',
 }
 
 export interface ICacheItem<T> {
@@ -27,9 +26,8 @@ export interface IAppCache {
   [CacheKey.GITHUB_REPO]?: IAppCacheItem<IGithubData>
   [CacheKey.FILE_LIST]?: IAppCacheItem<TFileList>
   [CacheKey.FILE]?: IAppCacheItem<TFile>
-  [CacheKey.TIMESHEET_LIST]?: IAppCacheItem<IDriveList>
   [CacheKey.TIMESHEET]?: IAppCacheItem<ITimesheetData>
-  [CacheKey.DRIVE_LIST]?: IAppCacheItem<TFileList>
+  [CacheKey.DRIVE_LIST]?: IAppCacheItem<IDriveList>
   [CacheKey.DRIVE]?: IAppCacheItem<TFile>
 }
 
