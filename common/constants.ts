@@ -4,4 +4,9 @@ export const APP_NAME = process.env.APP_NAME || 'littlemooon'
 export const PORT = process.env.PORT || 4000
 export const BASE_URL = process.env.BASE_URL || `http://localhost:${PORT}`
 
+export const DATA_FOLDER = 'app_data'
+export const DRIVE_FOLDERS = {
+  timesheet: 'timesheet',
+}
+
 export const FILE_DIR = 'tmp'

@@ -2,7 +2,6 @@ import * as express from 'express'
 import { google } from 'googleapis'
 import log from '../../common/log'
 import env from '../env'
-import { setupDrive } from '../utils/drive-utils'
 import { clearSession, getSession, setSession } from '../utils/session-utils'
 
 const SCOPES = [
@@ -56,7 +55,10 @@ export default function() {
 
       const { emails, id, displayName, image, language } = me.data
 
-      const session = setSession(req, {
+      const redirect = getSession(req).redirect || '/'
+
+      setSession(req, {
+        redirect: undefined,
         user: {
           id,
           email: (emails && emails.length && emails[0].value) || '',
@@ -67,9 +69,7 @@ export default function() {
         },
       })
 
-      setupDrive(req)
-
-      res.redirect(session.redirect || '/')
+      res.redirect(redirect)
     } catch (e) {
       log.error('/google/callback:', e)
       res.status(500).send({ status: 'unable_to_login', message: e.message })

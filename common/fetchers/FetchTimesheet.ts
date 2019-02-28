@@ -12,7 +12,7 @@ export default class FetchTimesheet extends Fetch<
   { filename: string }
 > {
   constructor(opts?: RequestInit) {
-    super(({ filename }) => `/file/${filename}`, opts)
+    super(({ filename }) => `/drive/timesheet/${filename}`, opts)
   }
 
   public transformBody = async (res: Response): Promise<ITimesheetData[]> => {

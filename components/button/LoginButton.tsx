@@ -1,15 +1,8 @@
 import Link from 'next/link'
 import { withRouter, WithRouterProps } from 'next/router'
 import { SFC, useContext } from 'react'
-import { logoutFetcher } from '../../common/fetchers/index'
-import { removeStorage, StorageKey } from '../../common/storage'
 import { ServerContext } from '../../state/ServerState'
 import Button, { IButtonProps } from '../base/Button'
-
-const onLogout = () => {
-  removeStorage(StorageKey.AUTH_STATE)
-  logoutFetcher.get({})
-}
 
 const LoginButton: SFC<
   IButtonProps & WithRouterProps & { redirect?: string }
@@ -19,7 +12,7 @@ const LoginButton: SFC<
 
   return serverState.token ? (
     <Link href="/">
-      <Button onClick={onLogout} {...props}>
+      <Button onClick={serverState.logout} {...props}>
         Logout
       </Button>
     </Link>

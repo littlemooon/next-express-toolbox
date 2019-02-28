@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useState } from 'react'
 import { FetchState, IFetchResponse } from '../common/Fetch'
 import { IGithubData, ITimesheetData } from '../common/types/api'
-import { TFile, TFileList } from '../common/types/index'
+import { IDriveList, TFile, TFileList } from '../common/types/index';
 import { noop } from '../common/utils'
 
 export enum CacheKey {
@@ -27,7 +27,7 @@ export interface IAppCache {
   [CacheKey.GITHUB_REPO]?: IAppCacheItem<IGithubData>
   [CacheKey.FILE_LIST]?: IAppCacheItem<TFileList>
   [CacheKey.FILE]?: IAppCacheItem<TFile>
-  [CacheKey.TIMESHEET_LIST]?: IAppCacheItem<TFileList>
+  [CacheKey.TIMESHEET_LIST]?: IAppCacheItem<IDriveList>
   [CacheKey.TIMESHEET]?: IAppCacheItem<ITimesheetData>
   [CacheKey.DRIVE_LIST]?: IAppCacheItem<TFileList>
   [CacheKey.DRIVE]?: IAppCacheItem<TFile>
