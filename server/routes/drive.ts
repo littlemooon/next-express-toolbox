@@ -36,7 +36,7 @@ async function createDriveFile(
     busboy.on('file', async (name, file) => {
       const folders = getSession(req).folders
       const drive = await getDrive(req)
-      const { data } = await drive.files.create({
+      await drive.files.create({
         resource: {
           name,
           parents: [folders[folder]],
