@@ -29,11 +29,11 @@ const DrivePage: NextFC = () => {
   )
 }
 
-DrivePage.getInitialProps = async () => {
-  const result = await driveListFetcher.get({})
-  return {
-    initialCache: new Map([[CacheKey.DRIVE_LIST, [result]]]),
-  }
-}
+// DrivePage.getInitialProps = async () => {
+//   const result = await driveListFetcher.get({})
+//   return {
+//     initialCache: new Map([[CacheKey.DRIVE_LIST, [result]]]),
+//   }
+// }
 
 export default DrivePage

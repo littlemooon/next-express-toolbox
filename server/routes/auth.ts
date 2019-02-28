@@ -1,89 +1,80 @@
 import * as express from 'express'
-import * as passport from 'passport'
-import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth'
+import { google } from 'googleapis'
+import log from '../../common/log'
+import { IAuthUser } from '../../common/types/index'
 import env from '../env'
 
 const SCOPES = [
+  'https://www.googleapis.com/auth/plus.me',
+  'https://www.googleapis.com/auth/userinfo.email',
   'https://www.googleapis.com/auth/userinfo.profile',
   'https://www.googleapis.com/auth/drive.file',
 ]
 
-function extractProfile(profile: passport.Profile) {
-  const photos = profile.photos
-  const imageUrl = photos && photos.length ? photos[0].value : ''
+const oauthClient = new google.auth.OAuth2(
+  env.GOOGLE_CLIENT_ID,
+  env.GOOGLE_CLIENT_SECRET,
+  env.GOOGLE_REDIRECT_URL
+)
 
-  return {
-    id: profile.id,
-    displayName: profile.displayName,
-    image: imageUrl,
+export const getAuthClient = (req: express.Request) => {
+  const tokens = req.session && req.session.tokens
+  if (tokens) {
+    oauthClient.setCredentials(tokens)
+  } else {
+    log.error('getAuthClient', new Error('No auth tokens in session'))
   }
-}
-
-function createClient() {
-  passport.use(
-    new GoogleStrategy(
-      {
-        clientID: env.GOOGLE_CLIENT_ID,
-        clientSecret: env.GOOGLE_CLIENT_SECRET,
-        callbackURL: env.GOOGLE_REDIRECT_URL,
-      },
-      (token, _, profile, cb) => {
-        cb(null, { profile, token, ...extractProfile(profile) })
-      }
-    )
-  )
-
-  passport.serializeUser((user, cb) => {
-    cb(null, user)
-  })
-
-  passport.deserializeUser((obj, cb) => {
-    cb(null, obj)
-  })
-}
-
-export function authRequired(
-  req: express.Request,
-  res: express.Response,
-  next: express.NextFunction
-) {
-  if (!req.user) {
-    req.session = req.session || {}
-    req.session.oauth2return = req.originalUrl
-    return res.redirect('/login')
-  }
-  next()
+  return oauthClient
 }
 
 export default function() {
   const router = express.Router()
 
-  createClient()
+  router.get('/google', (req, res) => {
+    req.session = { ...req.session, redirect: req.query.redirect }
 
-  router.get(
-    '/google',
-    (req, _, next) => {
-      req.session = { ...req.session, redirect: req.query.redirect }
-      next()
-    },
-    passport.authenticate('google', {
+    const url = oauthClient.generateAuthUrl({
+      access_type: 'offline',
+      prompt: 'consent',
       scope: SCOPES,
     })
-  )
 
-  router.get(
-    '/google/callback',
-    passport.authenticate('google', {
-      failureRedirect: '/login',
-    }),
-    (req, res) => {
-      req.session = { ...req.session, token: req.user.token }
+    res.redirect(url)
+  })
+
+  router.get('/google/callback', async (req, res) => {
+    try {
+      const code = req.query.code
+
+      const data = await oauthClient.getToken(code)
+      const tokens = data.tokens
+      req.session = { ...req.session, tokens }
+
+      const plus = google.plus({ version: 'v1', auth: getAuthClient(req) })
+      const me = await plus.people.get({ userId: 'me' })
+
+      const { emails, id, displayName, image, language } = me.data
+      const user: IAuthUser = {
+        id,
+        email: (emails && emails.length && emails[0].value) || '',
+        name: displayName,
+        image: image && image.url,
+        language,
+        token: tokens.access_token || undefined,
+      }
+
+      req.session = { ...req.session, user }
+      log.info({ data, me })
+      log.info(req.session)
+
       res.redirect(req.session.redirect || '/')
+    } catch (e) {
+      log.error('/google/callback:', e)
+      res.status(500).send({ status: 'unable_to_login', message: e.message })
     }
-  )
+  })
 
   router.get('/logout', (req, res) => {
-    req.logout()
     req.session = undefined
     res.redirect('/')
   })

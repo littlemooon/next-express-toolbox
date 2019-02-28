@@ -2,9 +2,8 @@ import * as cookieParser from 'cookie-parser'
 import * as express from 'express'
 import * as morgan from 'morgan'
 import * as next from 'next'
-import * as passport from 'passport'
 import { DEV, PORT } from '../common/constants'
-import { error, log } from '../common/log'
+import log from '../common/log'
 import { startsWith } from '../common/string'
 import env from './env'
 import api from './routes/api'
@@ -37,9 +36,6 @@ nextApp
     )
     app.use(cookieParser())
 
-    app.use(passport.initialize())
-    app.use(passport.session())
-
     app.use('/api/auth', auth())
 
     app.use('/api/pdf', pdf())
@@ -56,10 +52,10 @@ nextApp
       if (err) {
         throw err
       }
-      log(`> Ready on http://localhost:${PORT}`)
+      log.info(`> Ready on http://localhost:${PORT}`)
     })
   })
   .catch(e => {
-    error('server/index', e)
+    log.error('server/index', e)
     process.exit(1)
   })

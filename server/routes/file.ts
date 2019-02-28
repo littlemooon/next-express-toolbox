@@ -5,7 +5,7 @@ import * as express from 'express'
 import * as fs from 'fs'
 import * as path from 'path'
 import { FILE_DIR } from '../../common/constants'
-import { error } from '../../common/log'
+import log from '../../common/log'
 import { endsWith } from '../../common/string'
 import { readDirAsync, readFileAsync } from '../utils/file-utils'
 
@@ -23,7 +23,7 @@ async function getFiles(_: express.Request, res: express.Response) {
     }
     res.send(filenames)
   } catch (e) {
-    error('getFiles:', e)
+    log.error('getFiles:', e)
     res.status(500).send({ status: 'unable_to_get_files', message: e.message })
   }
 }
@@ -45,7 +45,7 @@ export async function getFile(req: express.Request, res: express.Response) {
       })
     }
   } catch (e) {
-    error('getFile:', e)
+    log.error('getFile:', e)
     res.status(500).send({ status: 'unable_to_get_file', message: e.message })
   }
 }
@@ -72,7 +72,7 @@ async function saveFile(req: express.Request, res: express.Response) {
 
     return req.pipe(busboy)
   } catch (e) {
-    error('saveFile:', e)
+    log.error('saveFile:', e)
     res.status(500).send({ status: 'unable_to_save_file', message: e.message })
   }
 }

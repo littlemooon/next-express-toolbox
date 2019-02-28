@@ -7,17 +7,18 @@ import { StorageKey } from '../common/storage'
 import { IAuthUser } from '../common/types'
 
 export interface IServerState {
-  user: Partial<IAuthUser>
+  user: IAuthUser
   token?: string
   isServerRendered: boolean
   isServer: boolean
 }
 
-export function getServerState(ctx: NextContext) {
+export function getServerState(ctx: NextContext): IServerState {
   return {
-    user: d.get(ctx, 'req.session.passport.user.profile'),
-    token: d.get(ctx, 'req.session.token'),
+    user: d.get(ctx, 'req.session.user') || {},
+    token: d.get(ctx, 'req.session.user.token'),
     isServerRendered: isServer,
+    isServer,
   }
 }
 

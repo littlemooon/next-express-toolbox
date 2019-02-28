@@ -1,7 +1,5 @@
 import { NextFC } from 'next'
-import { useEffect } from 'react'
 import { timesheetFetcher } from '../common/fetchers/index'
-import useFetch from '../common/hooks/useFetch'
 import Card from '../components/base/Card'
 import Grid from '../components/base/Grid'
 import TimesheetChart from '../components/chart/TimesheetChart'
@@ -14,12 +12,6 @@ const files = [
 ]
 
 const ChartPage: NextFC = () => {
-  const fetch = useFetch(CacheKey.TIMESHEET, timesheetFetcher)
-
-  useEffect(() => {
-    files.map(filename => fetch.get({ filename }))
-  }, [])
-
   return (
     <Layout requireAuth={true}>
       <Grid
