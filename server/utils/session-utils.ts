@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { IDriveFolders, ISession } from '../../common/types/index'
+import { ISession, TDriveFolders } from '../../common/types/index'
 
 export function getSession(req: express.Request) {
   req.session = { folders: {}, ...req.session }
@@ -13,7 +13,7 @@ export function setSession(req: express.Request, session: Partial<ISession>) {
 
 export function setSessionFolder(
   req: express.Request,
-  folders: Partial<IDriveFolders>
+  folders: Partial<TDriveFolders>
 ) {
   return setSession(req, {
     folders: { ...(req.session ? req.session.folders : undefined), ...folders },

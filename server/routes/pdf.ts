@@ -3,6 +3,7 @@ import * as puppeteer from 'puppeteer'
 import * as qs from 'query-string'
 import { BASE_URL } from '../../common/constants'
 import log from '../../common/log'
+import { getSession } from '../utils/session-utils'
 
 export default function() {
   const router = express.Router()
@@ -13,7 +14,11 @@ export default function() {
       const page = await browser.newPage()
 
       const path = req.params[0]
-      const query = qs.stringify(req.query)
+      const tokens = getSession(req).tokens
+      const query = qs.stringify({
+        ...req.query,
+        token: tokens ? tokens.access_token : undefined,
+      })
 
       await page.goto(`${BASE_URL}${path}?${query}`)
 

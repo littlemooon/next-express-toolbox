@@ -17,14 +17,64 @@ const oauthClient = new google.auth.OAuth2(
   env.GOOGLE_REDIRECT_URL
 )
 
-export const getAuthClient = (req: express.Request) => {
+export function getAuthClient(req: express.Request) {
   const tokens = getSession(req).tokens
+
   if (tokens) {
     oauthClient.setCredentials(tokens)
   } else {
     log.error('getAuthClient', new Error('No auth tokens in session'))
   }
   return oauthClient
+}
+
+export async function initAuth(
+  req: express.Request,
+  _: express.Response,
+  next: express.NextFunction
+) {
+  const sessionTokens = getSession(req).tokens
+  const token = req.cookies.token || req.query.token
+
+  if (token && !sessionTokens) {
+    setSession(req, { tokens: { access_token: token } })
+    await setUser(req)
+  }
+  next()
+}
+
+export async function requireAuth(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  if (getSession(req).tokens) {
+    next()
+  } else {
+    return res
+      .status(401)
+      .send({ status: 'auth_required', message: 'You must be logged in' })
+  }
+}
+
+async function setUser(req: express.Request) {
+  const plus = google.plus({
+    version: 'v1',
+    auth: getAuthClient(req),
+  })
+  const me = await plus.people.get({ userId: 'me' })
+
+  const { emails, id, displayName, image, language } = me.data
+
+  setSession(req, {
+    user: {
+      id,
+      email: (emails && emails.length && emails[0].value) || '',
+      name: displayName,
+      image: image && image.url,
+      language,
+    },
+  })
 }
 
 export default function() {
@@ -44,30 +94,14 @@ export default function() {
 
   router.get('/google/callback', async (req, res) => {
     try {
+      const redirect = getSession(req).redirect || '/'
       const code = req.query.code
 
-      const data = await oauthClient.getToken(code)
-      const tokens = data.tokens
-      setSession(req, { tokens })
+      const { tokens } = await oauthClient.getToken(code)
+      res.cookie('token', tokens.access_token)
+      setSession(req, { tokens, redirect: undefined })
 
-      const plus = google.plus({ version: 'v1', auth: getAuthClient(req) })
-      const me = await plus.people.get({ userId: 'me' })
-
-      const { emails, id, displayName, image, language } = me.data
-
-      const redirect = getSession(req).redirect || '/'
-
-      setSession(req, {
-        redirect: undefined,
-        user: {
-          id,
-          email: (emails && emails.length && emails[0].value) || '',
-          name: displayName,
-          image: image && image.url,
-          language,
-          token: tokens.access_token || undefined,
-        },
-      })
+      await setUser(req)
 
       res.redirect(redirect)
     } catch (e) {
@@ -78,6 +112,7 @@ export default function() {
 
   router.get('/logout', (req, res) => {
     clearSession(req)
+    req.clearCookie('token')
     res.redirect('/')
   })
 

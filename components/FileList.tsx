@@ -1,4 +1,4 @@
-import { SFC, useCallback, useEffect } from 'react'
+import { SFC, useCallback } from 'react'
 import { fileListFetcher } from '../common/fetchers'
 import useFetch from '../common/hooks/useFetch'
 import { CacheKey } from '../state/CacheState'
@@ -17,10 +17,6 @@ const FileList: SFC<IFileListProps> = props => {
     (filename: string) => () => props.onSelect(filename),
     []
   )
-
-  useEffect(() => {
-    csvFetch.get({})
-  }, [])
 
   return csvFetch.data ? (
     <>

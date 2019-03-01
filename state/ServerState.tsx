@@ -17,7 +17,7 @@ export interface IServerState {
 export function getServerState(ctx: NextContext): IServerState {
   return {
     user: d.get(ctx, 'req.session.user') || {},
-    token: d.get(ctx, 'req.session.user.token'),
+    token: d.get(ctx, 'req.session.tokens.access_token'),
     isServerRendered: isServer,
     isServer,
   }

@@ -7,7 +7,7 @@ import log from '../common/log'
 import { startsWith } from '../common/string'
 import env from './env'
 import api from './routes/api'
-import auth from './routes/auth'
+import auth, { initAuth, requireAuth } from './routes/auth'
 import drive from './routes/drive'
 import file from './routes/file'
 import pdf from './routes/pdf'
@@ -35,6 +35,7 @@ nextApp
       })
     )
     app.use(cookieParser())
+    app.use(initAuth)
 
     app.use('/api/auth', auth())
 
@@ -42,7 +43,7 @@ nextApp
 
     app.use('/api/file', file())
 
-    app.use('/api/drive', drive())
+    app.use('/api/drive', requireAuth, drive())
 
     app.use('/api', api())
 

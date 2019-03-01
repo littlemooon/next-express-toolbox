@@ -1,15 +1,15 @@
 import * as Busboy from 'busboy'
 import * as express from 'express'
-import { DATA_FOLDER } from '../../common/constants'
+import { DRIVE_DATA_FOLDER } from '../../common/constants'
 import log from '../../common/log'
-import { IDriveFolders } from '../../common/types/index'
+import { TDriveFolder } from '../../common/types/index'
 import { getDrive } from '../utils/drive-utils'
 import { getSession } from '../utils/session-utils'
 
 async function getDriveList(
   req: express.Request,
   res: express.Response,
-  folder: keyof IDriveFolders = DATA_FOLDER
+  folder: TDriveFolder = DRIVE_DATA_FOLDER
 ) {
   try {
     const folders = getSession(req).folders
@@ -29,7 +29,7 @@ async function getDriveList(
 async function createDriveFile(
   req: express.Request,
   res: express.Response,
-  folder: keyof IDriveFolders = DATA_FOLDER
+  folder: TDriveFolder = DRIVE_DATA_FOLDER
 ) {
   try {
     const busboy = new Busboy({ headers: req.headers })

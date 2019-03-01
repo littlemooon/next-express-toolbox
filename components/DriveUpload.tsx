@@ -3,7 +3,7 @@ import { FetchState } from '../common/Fetch'
 import { driveListFetcher } from '../common/fetchers/index'
 import useFetch from '../common/hooks/useFetch'
 import theme from '../common/theme'
-import { IDriveFolders } from '../common/types'
+import { TDriveFolder } from '../common/types'
 import { CacheKey } from '../state/CacheState'
 import Button from './base/Button'
 import Card from './base/Card'
@@ -16,7 +16,7 @@ import Text from './base/Text'
 export interface IDriveUploadProps {
   type?: 'text/csv'
   multiple?: boolean
-  folder?: keyof IDriveFolders
+  folder?: TDriveFolder
 }
 
 function getFormData(files: FileList) {

@@ -1,5 +1,4 @@
 import { Credentials } from 'google-auth-library'
-import { DATA_FOLDER } from '../constants'
 
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 
@@ -34,14 +33,12 @@ export interface IAuthUser {
   token?: string
 }
 
-export interface IDriveFolders {
-  [DATA_FOLDER]?: string
-  timesheet?: string
-}
+export type TDriveFolder = 'app_data' | 'timesheet' | 'log'
+export type TDriveFolders = Partial<Record<TDriveFolder, string>>
 
 export interface ISession {
   user?: IAuthUser
   redirect?: string
   tokens?: Credentials
-  folders: IDriveFolders
+  folders: TDriveFolders
 }

@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useState } from 'react'
 import { FetchState, IFetchResponse } from '../common/Fetch'
 import { IGithubData, ITimesheetData } from '../common/types/api'
-import { IDriveList, TFile, TFileList } from '../common/types/index';
+import { IDriveList, TFile, TFileList } from '../common/types/index'
 import { noop } from '../common/utils'
 
 export enum CacheKey {

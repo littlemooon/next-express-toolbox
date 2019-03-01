@@ -1,9 +1,11 @@
 import { NextFC } from 'next'
 import { useCallback, useState } from 'react'
+import { driveListFetcher } from '../common/fetchers/index'
 import { TextH1 } from '../components/base/Text'
 import DriveList from '../components/DriveList'
 import DriveUpload from '../components/DriveUpload'
 import Layout from '../layout'
+import { CacheKey } from '../state/CacheState'
 
 const DrivePage: NextFC = () => {
   const [id, setId] = useState<string | undefined>(undefined)
@@ -20,11 +22,15 @@ const DrivePage: NextFC = () => {
   )
 }
 
-// DrivePage.getInitialProps = async () => {
-//   const result = await driveListFetcher.get({})
-//   return {
-//     initialCache: new Map([[CacheKey.DRIVE_LIST, [result]]]),
-//   }
-// }
+DrivePage.getInitialProps = async () => {
+  const results = await Promise.all([
+    driveListFetcher.get({}),
+    driveListFetcher.get({ folder: 'timesheet' }),
+  ])
+  console.log('-------------------- drive --> ', results[0])
+  return {
+    initialCache: new Map([[CacheKey.DRIVE_LIST, results]]),
+  }
+}
 
 export default DrivePage

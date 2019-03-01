@@ -1,3 +1,4 @@
+import { css, Global } from '@emotion/core'
 import { NextFC } from 'next'
 import Head from 'next/head'
 import { ReactNode, useContext } from 'react'
@@ -30,6 +31,13 @@ const Layout: NextFC<ILayoutProps> = ({
         <meta charSet="utf-8" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
+      <Global
+        styles={css`
+          html {
+            -webkit-print-color-adjust: exact;
+          }
+        `}
+      />
       <Box width={1}>
         <Header />
         <Container as="main" py={[3, 4, 5]}>

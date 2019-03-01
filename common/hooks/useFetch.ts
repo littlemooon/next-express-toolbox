@@ -117,7 +117,12 @@ export default function useFetch<T, P extends object = {}>(
     }
   }
 
-  useEffect(() => cleanup, [])
+  useEffect(() => {
+    if (initialUrlParams) {
+      get(initialUrlParams)
+    }
+    return cleanup
+  }, [])
 
   return {
     ...fetchState,

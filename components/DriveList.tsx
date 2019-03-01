@@ -1,27 +1,25 @@
-import { SFC, useCallback, useEffect } from 'react'
+import { SFC, useCallback } from 'react'
 import { FetchState } from '../common/Fetch'
 import { driveListFetcher } from '../common/fetchers/index'
 import useFetch from '../common/hooks/useFetch'
-import { IDriveFolders } from '../common/types/index'
+import { TDriveFolder } from '../common/types/index'
 import { CacheKey } from '../state/CacheState'
 import Card from './base/Card'
 import ErrorBox from './base/ErrorBox'
 import Spinner from './base/Spinner'
 
 export interface IDriveListProps {
-  folder?: keyof IDriveFolders
+  folder?: TDriveFolder
   onSelect: (id: string) => void
 }
 
 const DriveList: SFC<IDriveListProps> = p => {
-  const fetch = useFetch(CacheKey.DRIVE_LIST, driveListFetcher)
-
-  useEffect(() => {
-    fetch.get({ folder: p.folder })
-  }, [])
+  const fetch = useFetch(CacheKey.DRIVE_LIST, driveListFetcher, {
+    initialUrlParams: { folder: p.folder },
+  })
 
   const onClick = useCallback((id: string) => () => p.onSelect(id), [])
-
+  console.log('-------------------- DriveList --> ', fetch.state)
   return (
     <Card>
       {fetch.state === FetchState.LOADING ? (
