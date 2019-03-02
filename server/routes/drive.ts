@@ -1,6 +1,6 @@
 import * as Busboy from 'busboy'
 import * as express from 'express'
-import { DRIVE_DATA_FOLDER } from '../../common/constants'
+import config from '../../common/config'
 import log from '../../common/log'
 import { TDriveFolder } from '../../common/types/index'
 import { getDrive } from '../utils/drive-utils'
@@ -9,7 +9,7 @@ import { getSession } from '../utils/session-utils'
 async function getDriveList(
   req: express.Request,
   res: express.Response,
-  folder: TDriveFolder = DRIVE_DATA_FOLDER
+  folder: TDriveFolder = config.DRIVE_DATA_FOLDER
 ) {
   try {
     const folders = getSession(req).folders
@@ -29,7 +29,7 @@ async function getDriveList(
 async function createDriveFile(
   req: express.Request,
   res: express.Response,
-  folder: TDriveFolder = DRIVE_DATA_FOLDER
+  folder: TDriveFolder = config.DRIVE_DATA_FOLDER
 ) {
   try {
     const busboy = new Busboy({ headers: req.headers })
@@ -68,6 +68,8 @@ export default function() {
   const router = express.Router()
 
   router.get('/:folder?', async (req, res) => {
+    log.info(req.cookies)
+    log.info(req.signedCookies)
     return getDriveList(req, res, req.params.folder)
   })
 

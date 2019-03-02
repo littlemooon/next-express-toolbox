@@ -42,3 +42,7 @@ export interface ISession {
   tokens?: Credentials
   folders: TDriveFolders
 }
+
+export interface ICookies {
+  token?: string
+}

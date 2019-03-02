@@ -38,10 +38,13 @@ const FilePage: NextFC = () => {
   )
 }
 
-FilePage.getInitialProps = async () => {
-  const result = await fileListFetcher.get({})
+FilePage.getInitialProps = async ctx => {
+  fileListFetcher.setToken(ctx)
+
   return {
-    initialCache: new Map([[CacheKey.FILE_LIST, [result]]]),
+    initialCache: new Map([
+      [CacheKey.FILE_LIST, [await fileListFetcher.get({})]],
+    ]),
   }
 }
 

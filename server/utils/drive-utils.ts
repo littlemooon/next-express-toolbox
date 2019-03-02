@@ -1,28 +1,29 @@
 import * as express from 'express'
 import { google } from 'googleapis'
-import { DRIVE_DATA_FOLDER, DRIVE_FOLDERS } from '../../common/constants'
-import { getAuthClient } from '../routes/auth'
+import config from '../../common/config'
+import { getAuthClient } from './auth-utils'
 import { getSession, setSessionFolder } from './session-utils'
 
 export async function getDrive(req: express.Request) {
   const drive = google.drive({ version: 'v3', auth: getAuthClient(req) })
 
-  if (!getSession(req).folders[DRIVE_DATA_FOLDER]) {
+  if (!getSession(req).folders[config.DRIVE_DATA_FOLDER]) {
     const { data } = await drive.files.list()
 
     const existingDataFolder =
-      data.files && data.files.find(file => file.name === DRIVE_DATA_FOLDER)
+      data.files &&
+      data.files.find(file => file.name === config.DRIVE_DATA_FOLDER)
 
     const dataFolderId = existingDataFolder
       ? existingDataFolder.id
-      : await createDriveFolder(req, DRIVE_DATA_FOLDER)
+      : await createDriveFolder(req, config.DRIVE_DATA_FOLDER)
 
     if (!dataFolderId) {
       throw new Error('Failed to create drive data folder')
     }
 
     await Promise.all(
-      Object.keys(DRIVE_FOLDERS).map(async name => {
+      Object.keys(config.DRIVE_FOLDERS).map(async name => {
         const existingFolder =
           data.files && data.files.find(file => file.name === name)
 

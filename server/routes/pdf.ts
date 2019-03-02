@@ -1,7 +1,7 @@
 import * as express from 'express'
 import * as puppeteer from 'puppeteer'
 import * as qs from 'query-string'
-import { BASE_URL } from '../../common/constants'
+import config from '../../common/config'
 import log from '../../common/log'
 import { getSession } from '../utils/session-utils'
 
@@ -20,7 +20,7 @@ export default function() {
         token: tokens ? tokens.access_token : undefined,
       })
 
-      await page.goto(`${BASE_URL}${path}?${query}`)
+      await page.goto(`${config.BASE_URL}${path}?${query}`)
 
       const buffer = await page.pdf({ format: 'A4' })
 

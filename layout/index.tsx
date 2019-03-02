@@ -2,7 +2,7 @@ import { css, Global } from '@emotion/core'
 import { NextFC } from 'next'
 import Head from 'next/head'
 import { ReactNode, useContext } from 'react'
-import { APP_NAME } from '../common/constants'
+import config from '../common/config'
 import Box from '../components/base/Box'
 import Flex from '../components/base/Flex'
 import LoginForm from '../components/LoginForm'
@@ -19,7 +19,7 @@ export interface ILayoutProps {
 
 const Layout: NextFC<ILayoutProps> = ({
   children,
-  title = APP_NAME,
+  title = config.APP_NAME,
   requireAuth,
 }) => {
   const serverState = useContext(ServerContext)

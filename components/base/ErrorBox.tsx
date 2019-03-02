@@ -1,5 +1,5 @@
 import { ReactNode, SFC } from 'react'
-import { DEV } from '../../common/constants'
+import config from '../../common/config'
 import theme from '../../common/theme'
 import Card, { ICardProps } from './Card'
 import Text, { TextH2, TextH3 } from './Text'
@@ -21,7 +21,7 @@ const ErrorBox: SFC<IErrorBoxProps> = p => {
           ) : (
             <TextH2>Error: {p.error.message}</TextH2>
           )}
-          {DEV &&
+          {config.DEV &&
             p.error.stack &&
             p.error.stack
               .split('\n')

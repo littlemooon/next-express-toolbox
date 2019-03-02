@@ -1,8 +1,10 @@
 import to from 'await-to-js'
 import fetch from 'isomorphic-unfetch'
-import { BASE_URL } from './constants'
+import { NextContext } from 'next'
+import { getServerState } from '../state/ServerState'
+import config from './config'
 import log from './log'
-import { startsWith } from './string'
+import { includes, startsWith } from './string'
 
 export enum FetchState {
   LOADING = 'LOADING',
@@ -24,6 +26,7 @@ const noop = () => ''
 
 export default class Fetch<T, P extends object = {}> {
   public opts: RequestInit
+  public token?: string
   public constructUrl: ConstructUrl<P> = noop
   public lastResponse: IFetchResponse<T> = {
     state: FetchState.INITIAL,
@@ -40,9 +43,17 @@ export default class Fetch<T, P extends object = {}> {
     return json
   }
 
+  public setToken = (ctx?: NextContext) => {
+    this.token = ctx ? getServerState(ctx).token : undefined
+    return this
+  }
+
   public getUrl = (urlParams: P): string => {
     const url = this.constructUrl(urlParams)
-    return startsWith(url, '/') ? `${BASE_URL}/api${url}` : url
+    const token = this.token
+    const query = token ? `${includes(url, '?') ? '&' : '?'}token=${token}` : ''
+
+    return startsWith(url, '/') ? `${config.BASE_URL}/api${url}${query}` : url
   }
 
   public saveResponse = (response: IFetchResponse<T>) => {
@@ -55,7 +66,7 @@ export default class Fetch<T, P extends object = {}> {
     opts: RequestInit = {}
   ): Promise<IFetchResponse<T>> {
     const url = this.getUrl(urlParams)
-    const fetchOpts = {
+    const fetchOpts: RequestInit = {
       ...this.opts,
       ...opts,
     }

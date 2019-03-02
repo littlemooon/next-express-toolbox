@@ -66,14 +66,18 @@ const GithubPage: NextFC<IGithubProps> = props => {
   )
 }
 
-GithubPage.getInitialProps = async ({ query }) => {
+GithubPage.getInitialProps = async ctx => {
+  githubRepoFetcher.setToken(ctx)
+
+  const { query } = ctx
   const repo: string =
     query && typeof query.q === 'string' ? query.q : 'littlemooon/dotfiles'
 
-  const result = await githubRepoFetcher.get({ repo })
   return {
     repo,
-    initialCache: new Map([[CacheKey.GITHUB_REPO, [result]]]),
+    initialCache: new Map([
+      [CacheKey.GITHUB_REPO, [await githubRepoFetcher.get({ repo })]],
+    ]),
   }
 }
 

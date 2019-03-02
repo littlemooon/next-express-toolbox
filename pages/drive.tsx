@@ -22,14 +22,19 @@ const DrivePage: NextFC = () => {
   )
 }
 
-DrivePage.getInitialProps = async () => {
-  const results = await Promise.all([
-    driveListFetcher.get({}),
-    driveListFetcher.get({ folder: 'timesheet' }),
-  ])
-  console.log('-------------------- drive --> ', results[0])
+DrivePage.getInitialProps = async ctx => {
+  driveListFetcher.setToken(ctx)
+
   return {
-    initialCache: new Map([[CacheKey.DRIVE_LIST, results]]),
+    initialCache: new Map([
+      [
+        CacheKey.DRIVE_LIST,
+        await Promise.all([
+          driveListFetcher.get({}),
+          driveListFetcher.get({ folder: 'timesheet' }),
+        ]),
+      ],
+    ]),
   }
 }
 

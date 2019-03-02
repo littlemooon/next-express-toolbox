@@ -29,13 +29,18 @@ const ChartPage: NextFC = () => {
   )
 }
 
-ChartPage.getInitialProps = async () => {
-  const results = await Promise.all(
-    files.map(filename => timesheetFetcher.get({ filename }))
-  )
+ChartPage.getInitialProps = async ctx => {
+  timesheetFetcher.setToken(ctx)
 
   return {
-    initialCache: new Map([[CacheKey.TIMESHEET, results]]),
+    initialCache: new Map([
+      [
+        CacheKey.TIMESHEET,
+        await Promise.all(
+          files.map(filename => timesheetFetcher.get({ filename }))
+        ),
+      ],
+    ]),
   }
 }
 

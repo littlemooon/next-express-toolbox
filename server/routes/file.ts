@@ -4,7 +4,7 @@ import * as csv from 'csvtojson'
 import * as express from 'express'
 import * as fs from 'fs'
 import * as path from 'path'
-import { FILE_DIR } from '../../common/constants'
+import config from '../../common/config'
 import log from '../../common/log'
 import { endsWith } from '../../common/string'
 import { readDirAsync, readFileAsync } from '../utils/file-utils'
@@ -18,7 +18,7 @@ export default function() {
 
   router.get('/', async (_, res) => {
     try {
-      const [err, filenames] = await to(readDirAsync(FILE_DIR))
+      const [err, filenames] = await to(readDirAsync(config.FILE_DIR))
       if (err) {
         res
           .status(500)
@@ -38,10 +38,10 @@ export default function() {
       const filename = req.params.filename
 
       if (endsWith(filename, '.csv')) {
-        const json = await csv().fromFile(`${FILE_DIR}/${filename}`)
+        const json = await csv().fromFile(`${config.FILE_DIR}/${filename}`)
         res.send(json)
       } else if (endsWith(filename, '.json')) {
-        const json = await readFileAsync(`${FILE_DIR}/${filename}`)
+        const json = await readFileAsync(`${config.FILE_DIR}/${filename}`)
         res.send(json)
       } else {
         res.status(500).send({
@@ -63,7 +63,7 @@ export default function() {
         const saveTo = path.join(
           process.cwd(),
           '/',
-          FILE_DIR,
+          config.FILE_DIR,
           '/',
           path.basename(filename)
         )

@@ -19,7 +19,7 @@ const DriveList: SFC<IDriveListProps> = p => {
   })
 
   const onClick = useCallback((id: string) => () => p.onSelect(id), [])
-  console.log('-------------------- DriveList --> ', fetch.state)
+
   return (
     <Card>
       {fetch.state === FetchState.LOADING ? (
