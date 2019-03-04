@@ -1,12 +1,28 @@
 {
   "version": 2,
   "name": "next-express-toolbox",
-  "builds": [{
-      "src": "server/index.ts",
-      "use": "@now/node-server@canary"
-    }
 
+  "builds": [{
+    "src": "packages/server/routes/**/*.ts",
+    "use": "@now/node@canary"
+  }, {
+    "src": "packages/app/next.config.js",
+    "use": "@now/next"
+  }],
+
+  "routes": [{
+      "src": "/api/(.*)",
+      "dest": "/packages/server/routes/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/packages/app/$1",
+      "headers": {
+        "x-request-path": "$1"
+      }
+    }
   ],
+
   "env": {
     "IS_NOW": "true"
   }

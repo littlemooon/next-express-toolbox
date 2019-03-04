@@ -1,0 +1,47 @@
+import Card from 'common/components/base/Card'
+import ErrorBox from 'common/components/base/ErrorBox'
+import Spinner from 'common/components/base/Spinner'
+import { FetchState } from 'common/Fetch'
+import { driveListFetcher } from 'common/fetchers/index'
+import useFetch from 'common/hooks/useFetch'
+import { CacheKey } from 'common/state/CacheState'
+import { TDriveFolder } from 'common/types/index'
+import { SFC, useCallback } from 'react'
+
+export interface IDriveListProps {
+  folder?: TDriveFolder
+  onSelect: (id: string) => void
+}
+
+const DriveList: SFC<IDriveListProps> = p => {
+  const fetch = useFetch(CacheKey.DRIVE_LIST, driveListFetcher, {
+    initialUrlParams: { folder: p.folder },
+  })
+
+  const onClick = useCallback((id: string) => () => p.onSelect(id), [])
+
+  return (
+    <Card>
+      {fetch.state === FetchState.LOADING ? (
+        <Spinner />
+      ) : fetch.state === FetchState.SUCCESS &&
+        fetch.data &&
+        fetch.data.files ? (
+        <>
+          {fetch.data.files.map(({ name, id }) => (
+            <p key={id} onClick={onClick(id)}>
+              {name}
+            </p>
+          ))}
+        </>
+      ) : fetch.state === FetchState.ERROR ? (
+        <ErrorBox
+          header={'Failed to get files from google drive'}
+          error={fetch.error}
+        />
+      ) : null}
+    </Card>
+  )
+}
+
+export default DriveList
