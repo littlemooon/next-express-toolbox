@@ -1,7 +1,7 @@
-import Flex, { IFlexProps } from 'common/components/base/Flex'
-import styled, { StyledComponent } from 'common/styled'
-import theme from 'common/theme'
 import * as SS from 'styled-system'
+import styled, { StyledComponent } from '../../styled'
+import theme from '../../theme'
+import Flex, { IFlexProps } from '../base/Flex'
 
 export interface ICardProps
   extends IFlexProps,

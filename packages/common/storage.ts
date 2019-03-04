@@ -1,4 +1,4 @@
-import { fromWindow, WindowKey } from 'common/globals'
+import { fromWindow, WindowKey } from './globals'
 
 let localStorage: Storage | undefined
 

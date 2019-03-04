@@ -1,8 +1,8 @@
-import victoryTheme from 'common/victory-theme'
 import * as df from 'date-fns'
 import * as R from 'ramda'
 import { ReactElement, useMemo } from 'react'
 import { VictoryAxis, VictoryBar, VictoryChart } from 'victory'
+import victoryTheme from '../../victory-theme'
 
 export type TMinMax<T> = { min: T; max: T } | undefined
 

@@ -1,8 +1,8 @@
 
 {
   "verbose": true,
-  "watch": ["./src/**/*.*", "../common/**/*.*"],
+  "watch": ["./**/*.*", "../common/**/*.*"],
   "ext": "ts tsx",
   "ignore": ["**/*.test.ts"],
-  "exec": "ts-node ./src/index.ts"
+  "exec": "ts-node ./index.ts"
 }

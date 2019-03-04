@@ -21,12 +21,13 @@ app.use('/api/drive', requireAuth, drive)
 app.use('/api', api)
 
 app.use('*', (_, res) => {
-  res.status(404).send({ status: 'page_not_found', message: 'Page not found' })
+  // res.writeHead(404)
+  res.status(404).end('bloop')
 })
 
-app.listen(config.PORT, (err: Error) => {
+app.listen(config.SERVER_PORT, (err: Error) => {
   if (err) {
     throw err
   }
-  log.info(`> Ready on http://localhost:${config.PORT}`)
+  log.info(`> Ready on http://localhost:${config.SERVER_PORT}`)
 })

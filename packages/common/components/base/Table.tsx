@@ -1,7 +1,7 @@
-import Box from 'common/components/base/Box'
-import Text from 'common/components/base/Text'
-import theme from 'common/theme'
 import { ReactElement, useMemo } from 'react'
+import theme from '../../theme'
+import Box from '../base/Box'
+import Text from '../base/Text'
 
 export interface ITableProps<T> {
   data: T[]

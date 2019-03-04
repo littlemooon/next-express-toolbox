@@ -1,9 +1,9 @@
 import to from 'await-to-js'
-import config from 'common/config'
-import log from 'common/log'
-import { includes, startsWith } from 'common/string'
 import fetch from 'isomorphic-unfetch'
 import { NextContext } from 'next'
+import config from './config'
+import log from './log'
+import { includes, startsWith } from './string'
 
 export enum FetchState {
   LOADING = 'LOADING',
@@ -53,7 +53,7 @@ export default class Fetch<T, P extends object = {}> {
     const token = this.token
     const query = token ? `${includes(url, '?') ? '&' : '?'}token=${token}` : ''
 
-    return startsWith(url, '/') ? `${config.BASE_URL}/api${url}${query}` : url
+    return startsWith(url, '/') ? `${config.SERVER_URL}/api${url}${query}` : url
   }
 
   public saveResponse = (response: IFetchResponse<T>) => {

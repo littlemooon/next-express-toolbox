@@ -2,7 +2,7 @@ import Card from 'common/components/base/Card'
 import Grid from 'common/components/base/Grid'
 import TimesheetChart from 'common/components/chart/TimesheetChart'
 import { timesheetFetcher } from 'common/fetchers/index'
-import Layout from 'common/layout'
+import Layout from 'common/layout/index'
 import { CacheKey } from 'common/state/CacheState'
 import { NextFC } from 'next'
 

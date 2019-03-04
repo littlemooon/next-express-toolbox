@@ -1,5 +1,5 @@
 import ErrorBox from 'common/components/base/ErrorBox'
-import Layout from 'common/layout'
+import Layout from 'common/layout/index'
 import { NextContext, NextFC } from 'next'
 
 export interface IErrorProps {

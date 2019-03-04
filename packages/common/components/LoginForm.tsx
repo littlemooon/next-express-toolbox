@@ -1,9 +1,9 @@
-import Card from 'common/components/base/Card'
-import Flex from 'common/components/base/Flex'
-import { TextH1 } from 'common/components/base/Text'
-import LoginButton from 'common/components/button/LoginButton'
-import theme from 'common/theme'
 import { SFC } from 'react'
+import theme from '../theme'
+import Card from './base/Card'
+import Flex from './base/Flex'
+import { TextH1 } from './base/Text'
+import LoginButton from './button/LoginButton'
 
 const LoginForm: SFC = () => {
   return (

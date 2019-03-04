@@ -1,14 +1,16 @@
 import styled from '@emotion/styled'
-import Text, { ITextProps } from 'common/components/base/Text'
-import { StyledComponent } from 'common/styled'
-import { Omit } from 'common/types/index'
 import { HTMLAttributes } from 'react'
 import * as SS from 'styled-system'
+import { StyledComponent } from '../../styled'
+import { Omit } from '../../types/index'
+import Text, { ITextProps } from '../base/Text'
 
 export interface IButtonProps
   extends ITextProps,
     SS.ButtonStyleProps,
-    Omit<Omit<HTMLAttributes<HTMLButtonElement>, 'color'>, 'css'> {}
+    Omit<Omit<HTMLAttributes<HTMLButtonElement>, 'color'>, 'css'> {
+  href?: string
+}
 
 const Button: StyledComponent<IButtonProps> = styled(Text)(
   {

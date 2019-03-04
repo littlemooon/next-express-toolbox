@@ -1,15 +1,15 @@
 import { css, Global } from '@emotion/core'
-import Box from 'common/components/base/Box'
-import Flex from 'common/components/base/Flex'
-import LoginForm from 'common/components/LoginForm'
-import config from 'common/config'
-import Container from 'common/layout/Container'
-import Footer from 'common/layout/Footer'
-import Header from 'common/layout/Header'
-import { AuthContext } from 'common/state/AuthState'
 import { NextFC } from 'next'
 import Head from 'next/head'
 import { ReactNode, useContext } from 'react'
+import Box from '../components/base/Box'
+import Flex from '../components/base/Flex'
+import LoginForm from '../components/LoginForm'
+import config from '../config'
+import Container from '../layout/Container'
+import Footer from '../layout/Footer'
+import Header from '../layout/Header'
+import { AuthContext } from '../state/AuthState'
 
 export interface ILayoutProps {
   children: ReactNode

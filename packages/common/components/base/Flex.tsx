@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
-import Box, { IBoxProps } from 'common/components/base/Box'
-import { StyledComponent } from 'common/styled'
 import * as SS from 'styled-system'
+import { StyledComponent } from '../../styled'
+import Box, { IBoxProps } from '../base/Box'
 
 export interface IFlexProps
   extends IBoxProps,

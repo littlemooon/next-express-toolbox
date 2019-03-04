@@ -1,8 +1,9 @@
-import Button, { IButtonProps } from 'common/components/base/Button'
-import { AuthContext } from 'common/state/AuthState'
 import Link from 'next/link'
 import { withRouter, WithRouterProps } from 'next/router'
 import { SFC, useContext } from 'react'
+import config from '../../config'
+import { AuthContext } from '../../state/AuthState'
+import Button, { IButtonProps } from '../base/Button'
 
 const LoginButton: SFC<
   IButtonProps & WithRouterProps & { redirect?: string }
@@ -17,13 +18,15 @@ const LoginButton: SFC<
       </Button>
     </Link>
   ) : (
-    <Link
-      href={`/api/auth/google${
+    <Button
+      as="a"
+      href={`${config.SERVER_URL}/api/auth/google${
         pathname ? `?redirect=${redirect || pathname}` : ''
       }`}
+      {...props}
     >
-      <Button {...props}>Login</Button>
-    </Link>
+      Login
+    </Button>
   )
 }
 

@@ -30,6 +30,8 @@ export async function setAuthSession(
   const session = getSession(req)
   const token = req.query.token
 
+  log.info(req.path)
+  log.info(getSession(req))
   if (token) {
     if (!session.tokens) {
       setSession(req, { tokens: { access_token: token } })
@@ -47,7 +49,6 @@ export async function requireAuth(
   res: express.Response,
   next: express.NextFunction
 ) {
-  log.info(getSession(req))
   if (getSession(req).tokens) {
     next()
   } else {

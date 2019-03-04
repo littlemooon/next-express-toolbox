@@ -1,5 +1,5 @@
 import LoginForm from 'common/components/LoginForm'
-import Layout from 'common/layout'
+import Layout from 'common/layout/index'
 import { NextFC } from 'next'
 
 const LoginPage: NextFC = () => {

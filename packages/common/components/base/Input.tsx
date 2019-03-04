@@ -1,7 +1,7 @@
-import Box, { IBoxProps } from 'common/components/base/Box'
-import styled, { StyledComponent } from 'common/styled'
-import theme from 'common/theme'
 import { InputHTMLAttributes } from 'react'
+import styled, { StyledComponent } from '../../styled'
+import theme from '../../theme'
+import Box, { IBoxProps } from '../base/Box'
 
 const Input: StyledComponent<
   IBoxProps & InputHTMLAttributes<HTMLInputElement>

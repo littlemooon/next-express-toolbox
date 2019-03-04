@@ -1,7 +1,7 @@
-import Fetch, { FetchState } from 'common/Fetch'
-import useCache from 'common/hooks/useCache'
-import { CacheKey } from 'common/state/CacheState'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import Fetch, { FetchState } from '../Fetch'
+import useCache from '../hooks/useCache'
+import { CacheKey } from '../state/CacheState'
 
 export interface IFetchState<T> {
   data?: T

@@ -1,9 +1,9 @@
 import { keyframes } from '@emotion/core'
-import Box, { IBoxProps } from 'common/components/base/Box'
-import Flex from 'common/components/base/Flex'
-import styled, { StyledComponent } from 'common/styled'
-import theme from 'common/theme'
 import { SFC } from 'react'
+import styled, { StyledComponent } from '../../styled'
+import theme from '../../theme'
+import Box, { IBoxProps } from '../base/Box'
+import Flex from '../base/Flex'
 
 export interface ISpinnerDotProps extends IBoxProps {
   i: number

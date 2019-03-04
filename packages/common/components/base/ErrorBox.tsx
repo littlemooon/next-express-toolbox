@@ -1,8 +1,8 @@
-import Card, { ICardProps } from 'common/components/base/Card'
-import Text, { TextH2, TextH3 } from 'common/components/base/Text'
-import config from 'common/config'
-import theme from 'common/theme'
 import { ReactNode, SFC } from 'react'
+import config from '../../config'
+import theme from '../../theme'
+import Card, { ICardProps } from '../base/Card'
+import Text, { TextH2, TextH3 } from '../base/Text'
 
 export interface IErrorBoxProps extends ICardProps {
   header?: string

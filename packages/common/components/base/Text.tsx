@@ -1,7 +1,7 @@
-import Box, { IBoxProps } from 'common/components/base/Box'
-import styled, { StyledComponent } from 'common/styled'
 import { TextDecorationProperty } from 'csstype'
 import * as SS from 'styled-system'
+import styled, { StyledComponent } from '../../styled'
+import Box, { IBoxProps } from '../base/Box'
 
 export interface ITextProps
   extends IBoxProps,

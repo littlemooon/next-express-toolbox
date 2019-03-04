@@ -15,7 +15,7 @@ app.get('*', async (_, res) => {
     //   ...req.query,
     //   token: tokens ? tokens.access_token : undefined,
     // })
-    // await page.goto(`${config.BASE_URL}${path}?${query}`)
+    // await page.goto(`${config.CLIENT_URL}${path}?${query}`)
     // const buffer = await page.pdf({ format: 'A4' })
     // res.type('application/pdf')
     // res.send(buffer)

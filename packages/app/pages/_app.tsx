@@ -12,12 +12,12 @@ import theme from 'common/theme'
 import { ThemeProvider } from 'emotion-theming'
 import App, { Container, DefaultAppIProps, NextAppContext } from 'next/app'
 
-interface IAppPageProps {
+export interface IAppPageProps {
   authState?: IAuthState
   cache: IAppCache
 }
 
-interface IInitialProps {
+export interface IInitialProps {
   [x: string]: any
   initialCache?: Map<CacheKey, Array<IFetchResponse<any>>>
 }
@@ -59,6 +59,9 @@ export default class AppPage extends App<IAppPageProps> {
             body {
               margin: 0;
               padding: 0;
+              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+                Helvetica, Arial, sans-serif, 'Apple Color Emoji',
+                'Segoe UI Emoji', 'Segoe UI Symbol';
             }
             * {
               box-sizing: border-box;

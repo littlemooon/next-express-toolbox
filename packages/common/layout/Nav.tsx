@@ -1,8 +1,8 @@
-import Button from 'common/components/base/Button'
-import LoginButton from 'common/components/button/LoginButton'
-import theme from 'common/theme'
 import Link from 'next/link'
 import { SFC } from 'react'
+import Button from '../components/base/Button'
+import LoginButton from '../components/button/LoginButton'
+import theme from '../theme'
 
 const Nav: SFC = () => {
   return (

@@ -1,5 +1,5 @@
-import { CacheContext, CacheKey, IAppCacheItem } from 'common/state/CacheState'
 import { useContext } from 'react'
+import { CacheContext, CacheKey, IAppCacheItem } from '../state/CacheState'
 
 export interface ICache<T> {
   cache: IAppCacheItem<T>

@@ -1,8 +1,8 @@
-import Text from 'common/components/base/Text'
-import { fileListFetcher } from 'common/fetchers'
-import useFetch from 'common/hooks/useFetch'
-import { CacheKey } from 'common/state/CacheState'
 import { SFC, useCallback } from 'react'
+import { fileListFetcher } from '../fetchers'
+import useFetch from '../hooks/useFetch'
+import { CacheKey } from '../state/CacheState'
+import Text from './base/Text'
 
 export interface IFileListProps {
   onSelect: (filename: string) => void

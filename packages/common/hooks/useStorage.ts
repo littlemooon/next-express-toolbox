@@ -5,7 +5,7 @@ import {
   StorageIsValid,
   StorageKey,
   StorageValue,
-} from 'common/storage'
+} from '../storage'
 
 interface IStorage<T> {
   value: Partial<T> | undefined

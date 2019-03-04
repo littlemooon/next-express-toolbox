@@ -25,6 +25,16 @@ module.exports = withTypescript({
       })
     ]
 
+    config.module.rules.forEach((rule) => {
+      const ruleContainsTs = rule.test.toString().includes('ts|tsx')
+
+      if (ruleContainsTs && rule.use && rule.use.loader === 'next-babel-loader') {
+        rule.include = undefined
+      }
+    })
+
+    options.defaultLoaders.babel.options.configFile = path.join(__dirname, '.babelrc')
+
 
     return config
   }

@@ -1,8 +1,8 @@
-import Fetch from 'common/Fetch'
-import FetchGithub from 'common/fetchers/FetchGithub'
-import FetchTimesheet from 'common/fetchers/FetchTimesheet'
-import { IAuthState } from 'common/state/AuthState'
-import { IDriveList, TFile, TFileList } from 'common/types/index'
+import Fetch from '../Fetch'
+import FetchGithub from '../fetchers/FetchGithub'
+import FetchTimesheet from '../fetchers/FetchTimesheet'
+import { IAuthState } from '../state/AuthState'
+import { IDriveList, TFile, TFileList } from '../types/index'
 
 export const authFetcher = new Fetch<IAuthState>(() => '/auth')
 

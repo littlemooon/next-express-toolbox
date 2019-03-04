@@ -1,7 +1,7 @@
-import { logoutFetcher } from 'common/fetchers/index'
-import { IAuthUser } from 'common/types'
-import { noop } from 'common/utils'
 import { createContext, ReactNode, SFC, useState } from 'react'
+import { logoutFetcher } from '../fetchers/index'
+import { IAuthUser } from '../types'
+import { noop } from '../utils'
 
 export interface IAuthState {
   user: IAuthUser

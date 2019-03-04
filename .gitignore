@@ -3,5 +3,4 @@ yarn.lock
 .next/
 tmp/
 .env
-.env.server
 token.json

@@ -1,6 +1,6 @@
 import * as Styled from '@emotion/styled'
-import { ITheme } from 'common/theme'
 import { Ref } from 'react'
+import { ITheme } from './theme'
 
 export type Themed<P extends object> = Styled.WithTheme<P, ITheme>
 

@@ -1,6 +1,6 @@
-import Box from 'common/components/base/Box'
-import Container from 'common/layout/Container'
 import { SFC } from 'react'
+import Box from '../components/base/Box'
+import Container from '../layout/Container'
 
 const Footer: SFC = () => {
   return (

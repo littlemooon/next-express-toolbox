@@ -12,7 +12,7 @@ import Text, {
   TextH5,
   TextH6,
 } from 'common/components/base/Text'
-import Layout from 'common/layout'
+import Layout from 'common/layout/index'
 import { NextFC } from 'next'
 
 const IndexPage: NextFC = () => {

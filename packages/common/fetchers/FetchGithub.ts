@@ -1,5 +1,5 @@
-import Fetch from 'common/Fetch'
-import { IGithubData, IGithubDataRaw } from 'common/types/api'
+import Fetch from '../Fetch'
+import { IGithubData, IGithubDataRaw } from '../types/api'
 
 export default class FetchGithub extends Fetch<IGithubData, { repo: string }> {
   constructor(opts?: RequestInit) {

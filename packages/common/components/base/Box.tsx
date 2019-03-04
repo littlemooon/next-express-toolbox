@@ -1,7 +1,7 @@
 import isPropValid from '@emotion/is-prop-valid'
-import styled, { StyledComponent } from 'common/styled'
 import { CursorProperty } from 'csstype'
 import * as SS from 'styled-system'
+import styled, { StyledComponent } from '../../styled'
 
 export interface IBoxProps
   extends SS.SpaceProps,

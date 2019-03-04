@@ -1,5 +1,5 @@
-import Text from 'common/components/base/Text'
 import { ReactElement } from 'react'
+import Text from './base/Text'
 
 export interface IJsonProps<T extends object> {
   data?: T | T[]

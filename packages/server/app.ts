@@ -27,7 +27,7 @@ app.use(
     cookie: {
       secure: true,
       httpOnly: true,
-      domain: config.BASE_URL,
+      domain: config.SERVER_URL,
       expires: new Date(Date.now() + 60 * 60 * 1000),
     },
   })

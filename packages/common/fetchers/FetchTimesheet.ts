@@ -1,11 +1,11 @@
-import Fetch from 'common/Fetch'
+import * as df from 'date-fns'
+import * as R from 'ramda'
+import Fetch from '../Fetch'
 import {
   ITimesheetData,
   ITimesheetDataRaw,
   ITimesheetDataSerialized,
-} from 'common/types/api'
-import * as df from 'date-fns'
-import * as R from 'ramda'
+} from '../types/api'
 
 export default class FetchTimesheet extends Fetch<
   ITimesheetData[],

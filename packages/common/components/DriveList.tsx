@@ -1,12 +1,12 @@
-import Card from 'common/components/base/Card'
-import ErrorBox from 'common/components/base/ErrorBox'
-import Spinner from 'common/components/base/Spinner'
-import { FetchState } from 'common/Fetch'
-import { driveListFetcher } from 'common/fetchers/index'
-import useFetch from 'common/hooks/useFetch'
-import { CacheKey } from 'common/state/CacheState'
-import { TDriveFolder } from 'common/types/index'
 import { SFC, useCallback } from 'react'
+import { FetchState } from '../Fetch'
+import { driveListFetcher } from '../fetchers/index'
+import useFetch from '../hooks/useFetch'
+import { CacheKey } from '../state/CacheState'
+import { TDriveFolder } from '../types/index'
+import Card from './base/Card'
+import ErrorBox from './base/ErrorBox'
+import Spinner from './base/Spinner'
 
 export interface IDriveListProps {
   folder?: TDriveFolder

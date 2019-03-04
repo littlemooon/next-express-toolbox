@@ -1,10 +1,10 @@
-import ErrorBox from 'common/components/base/ErrorBox'
-import Spinner from 'common/components/base/Spinner'
-import { FetchState } from 'common/Fetch'
-import { fileFetcher } from 'common/fetchers'
-import useFetch from 'common/hooks/useFetch'
-import { CacheKey } from 'common/state/CacheState'
 import { SFC, useEffect } from 'react'
+import { FetchState } from '../Fetch'
+import { fileFetcher } from '../fetchers'
+import useFetch from '../hooks/useFetch'
+import { CacheKey } from '../state/CacheState'
+import ErrorBox from './base/ErrorBox'
+import Spinner from './base/Spinner'
 
 export interface IJsonFileProps {
   filename: string

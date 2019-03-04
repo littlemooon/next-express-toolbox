@@ -1,7 +1,7 @@
 // *
 // * Colors
 // *
-import { colors } from 'common/theme'
+import { colors } from './theme'
 
 const gridColor = colors.greyDark
 const textColor = colors.green

@@ -1,4 +1,4 @@
-interface IColors {
+export interface IColors {
   black: string
   blue: string
   blueDark: string

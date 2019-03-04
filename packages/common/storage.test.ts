@@ -1,9 +1,4 @@
-import {
-  getStorage,
-  removeStorage,
-  setStorage,
-  StorageKey,
-} from 'common/storage'
+import { getStorage, removeStorage, setStorage, StorageKey } from './storage'
 
 type I = object
 

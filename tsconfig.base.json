@@ -1,0 +1,56 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "composite": true,
+    "declaration": true,
+    "forceConsistentCasingInFileNames": true,
+    // "jsx": "react",
+    "jsx": "preserve",
+    "lib": ["dom", "es2017"],
+    // "module": "commonjs",
+    // "target": "es2017",
+    "module": "esnext",
+    "target": "esnext",
+    "moduleResolution": "node",
+    "noEmit": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "preserveConstEnums": true,
+    "pretty": true,
+    "removeComments": false,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+  },
+  "include": [
+    "packages/**/*",
+  ],
+  "exclude": [
+    "packages/**/*.test.*",
+    "**/node_modules",
+  ]
+}
+
+// {
+//   "compilerOptions": {
+//     "allowJs": true,
+//     "allowSyntheticDefaultImports": true,
+//     "declaration": true,
+//     "jsx": "preserve",
+//     "lib": ["dom", "es2017"],
+//     "module": "commonjs",
+//     // "module": "esnext",
+//     "moduleResolution": "node",
+//     "noEmit": true,
+//     "noUnusedLocals": true,
+//     "noUnusedParameters": true,
+//     "preserveConstEnums": true,
+//     "pretty": true,
+//     "removeComments": false,
+//     "skipLibCheck": true,
+//     "sourceMap": true,
+//     "strict": true
+//     "target": "es2017",
+//     // "target": "esnext",
+//   }
+// }

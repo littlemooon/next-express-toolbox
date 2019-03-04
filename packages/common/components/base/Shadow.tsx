@@ -1,5 +1,5 @@
-import Flex, { IFlexProps } from 'common/components/base/Flex'
-import styled, { StyledComponent } from 'common/styled'
+import styled, { StyledComponent } from '../../styled'
+import Flex, { IFlexProps } from '../base/Flex'
 
 export interface IShadowProps extends IFlexProps {
   noBorder?: boolean

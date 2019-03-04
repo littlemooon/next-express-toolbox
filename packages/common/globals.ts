@@ -1,4 +1,4 @@
-import { DeviceType } from 'common/types'
+import { DeviceType } from './types'
 
 export enum WindowKey {
   X = 'X',

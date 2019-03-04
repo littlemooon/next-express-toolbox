@@ -1,10 +1,10 @@
-import Shadow from 'common/components/base/Shadow'
-import { TextH1 } from 'common/components/base/Text'
-import { isServer } from 'common/globals'
-import Container from 'common/layout/Container'
-import Nav from 'common/layout/Nav'
-import theme from 'common/theme'
 import { SFC } from 'react'
+import Shadow from '../components/base/Shadow'
+import { TextH1 } from '../components/base/Text'
+import { isServer } from '../globals'
+import Container from '../layout/Container'
+import Nav from '../layout/Nav'
+import theme from '../theme'
 
 const Header: SFC = () => {
   return (

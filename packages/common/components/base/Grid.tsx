@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
-import Flex, { IFlexProps } from 'common/components/base/Flex'
-import { StyledComponent } from 'common/styled'
 import * as SS from 'styled-system'
+import { StyledComponent } from '../../styled'
+import Flex, { IFlexProps } from '../base/Flex'
 
 export interface IGridProps
   extends IFlexProps,

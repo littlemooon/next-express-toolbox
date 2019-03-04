@@ -1,5 +1,5 @@
 import chalk from 'chalk'
-import { isServer } from 'common/globals'
+import { isServer } from './globals'
 
 const getDate = () => new Date().toISOString()
 
