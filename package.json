@@ -17,7 +17,7 @@
   "dependencies": {
     "express": "^4.16.4",
     "fork-ts-checker-webpack-plugin": "^0.5.2",
-    "googleapis": "^37.2.0",
+    "googleapis": "^59.0.0",
     "helmet": "^3.15.1",
     "http-proxy": "^1.17.0",
     "isomorphic-unfetch": "^3.0.0",
